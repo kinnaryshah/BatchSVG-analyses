@@ -1,2 +1,3 @@
 # BatchSVG-analyses
-analyses for BatchSVG project
+
+This repository contains the analyses for the BatchSVG project.
