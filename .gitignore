@@ -1,0 +1,4 @@
+.vscode/
+.DS_Store
+spatialLIBD_DLPFC_12/.nextflow/
+spatialLIBD_DLPFC_12/results/*.RData
