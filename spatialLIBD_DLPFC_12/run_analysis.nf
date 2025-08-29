@@ -16,7 +16,7 @@ include { feat_sel } from './../scripts/spatial/feature_select.nf'
 include { vis_thres } from './../scripts/spatial/vis_thresholds.nf'
 include { bias } from './../scripts/spatial/bias_genes.nf'
 include { filter_out } from './../scripts/spatial/filter_set.nf'
-include { spot_plot_bias } from './../scripts/spatial/spot_plot_bias_genes.nf'
+include { spot_plot_bias } from './../scripts/spatial/bias_genes_plot.nf'
 
 
 workflow {
