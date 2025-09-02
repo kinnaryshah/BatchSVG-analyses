@@ -4,3 +4,5 @@ spatialLIBD_DLPFC_12/.nextflow/
 spatialLIBD_DLPFC_12/results/*.RData
 humanHippocampus2024/.nextflow/
 humanHippocampus2024/results/*.RData
+humanHippocampus2024/results/*.Rdata
+*/.Rhistory
