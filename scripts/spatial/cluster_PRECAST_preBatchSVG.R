@@ -6,6 +6,8 @@ library(purrr)
 library(dplyr)
 library(tidyverse)
 
+setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
+
 data_name <- "humanHippocampus2024"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
