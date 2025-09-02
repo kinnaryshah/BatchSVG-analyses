@@ -54,4 +54,4 @@ col_data_df <- colData(spe) |>
 rownames(col_data_df) <- colnames(spe)
 colData(spe)$PRECAST_cluster <- col_data_df$PRECAST_cluster
 
-save(spe, file = here(data_name, "results", paste0(data_name, "_spe_PRECAST_preBatchSVG.Rdata")))
+save(spe, file = here(data_name, "results", paste0(data_name, "_spe_PRECAST_postBatchSVG.Rdata")))
