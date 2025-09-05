@@ -5,6 +5,8 @@ library(dplyr)
 library(scater)
 library(scran)
 
+setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
+
 data_name <- "MouseBrainSerialSagittal-Posterior"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
