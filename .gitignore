@@ -5,4 +5,8 @@ spatialLIBD_DLPFC_12/results/*.RData
 humanHippocampus2024/.nextflow/
 humanHippocampus2024/results/*.RData
 humanHippocampus2024/results/*.Rdata
+MouseBrainSerialSagittal-Posterior/.nextflow/
+MouseBrainSerialSagittal-Posterior/results/*.RData
+MouseBrainSerialSagittal-Posterior/results/*.Rdata
+MouseBrainSerialSagittal-Posterior/preprocessed/
 */.Rhistory
