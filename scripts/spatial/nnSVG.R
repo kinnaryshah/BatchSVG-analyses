@@ -55,6 +55,8 @@ for (s in seq_along(sample_ids)) {
     rm(spe_sub)
 }
 
+save(res_list, file=here(data_name,"results","res_list_intermediate.Rdata"))
+
 sapply(res_list, nrow)
 
 # match results from each sample and store in matching rows
@@ -86,8 +88,7 @@ n_withinTop1000 <- apply(res_ranks, 1, function(r) sum(r <= 1000, na.rm = TRUE))
 # summary table
 df_summary <- data.frame(
     gene_id = names(avg_ranks),
-    gene_name = rowData(spe)[names(avg_ranks), "gene_name"],
-    gene_type = rowData(spe)[names(avg_ranks), "gene_type"],
+    gene_name = rowData(spe)[names(avg_ranks), "symbol"],
     overall_rank = rank(avg_ranks),
     average_rank = unname(avg_ranks),
     n_withinTop1000 = unname(n_withinTop1000),
