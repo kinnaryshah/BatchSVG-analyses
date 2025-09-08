@@ -125,4 +125,4 @@ topSVGsReplicated <- df_summaryReplicated$gene_name
 save(res_ranks,topSVGsReplicated,df_summaryReplicated,df_summary,top1000genes,
      file=here::here(data_name, "results",paste0(data_name,'_nnSVG_1000.rda')))
 
-write.csv(df_summaryReplicated, here(data_name, "results", paste0(data_name, "_nnSVG_SVGs.csv")))
+write.csv(df_summaryReplicated, here(data_name, "results", paste0(data_name, "_svgs.csv")))
