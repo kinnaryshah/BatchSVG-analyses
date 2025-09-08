@@ -28,7 +28,7 @@ seuList <- unique(spe$subject) |>
             project="dACC")
     })
 
-svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_subject_10_5_filt_svgs.csv")))
+svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_subject_4_7_filt_svgs.csv")))
 
 set.seed(1)
 preobj <- CreatePRECASTObject(seuList = seuList, customGenelist = svgs_after$gene_id,
