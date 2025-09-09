@@ -7,7 +7,7 @@ library(scran)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "MouseBrainSerialSagittal-Posterior"
+data_name <- "SpatialBenchVisium"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
 colData(spe)$sample_id <- factor(colData(spe)$sample_id)
@@ -88,7 +88,7 @@ n_withinTop1000 <- apply(res_ranks, 1, function(r) sum(r <= 1000, na.rm = TRUE))
 # summary table
 df_summary <- data.frame(
     gene_id = names(avg_ranks),
-    gene_name = rowData(spe)[names(avg_ranks), "symbol"],
+    gene_name = rowData(spe)[names(avg_ranks), "gene_name"],
     overall_rank = rank(avg_ranks),
     average_rank = unname(avg_ranks),
     n_withinTop1000 = unname(n_withinTop1000),
