@@ -9,4 +9,5 @@ MouseBrainSerialSagittal-Posterior/.nextflow/
 MouseBrainSerialSagittal-Posterior/results/*.RData
 MouseBrainSerialSagittal-Posterior/results/*.Rdata
 MouseBrainSerialSagittal-Posterior/preprocessed/
+SpatialBenchVisium/preprocessed/
 */.Rhistory
