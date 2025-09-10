@@ -8,15 +8,15 @@ library(tidyverse)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "spatialLIBD_DLPFC_12"
+data_name <- "SpatialBenchVisium"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
 colnames(spe) <- spe$key
 
-seuList <- unique(spe$subject) |>
-    set_names(unique(spe$subject)) |>
+seuList <- unique(spe$sample_id) |>
+    set_names(unique(spe$sample_id)) |>
     map(.f = function(id) {
-        tmp_spe <- spe[, spe$subject == id]
+        tmp_spe <- spe[, spe$sample_id == id]
 
         tmp_spe$row <- tmp_spe$array_row
         tmp_spe$col <- tmp_spe$array_col
@@ -29,7 +29,7 @@ seuList <- unique(spe$subject) |>
     })
 
 svgs_before <- read.csv(file = here(data_name, "results", paste0(data_name, "_svgs.csv")),row.names=1)
-svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_subject_4_7_filt_svgs.csv")))
+svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_sample_id_4_7_filt_svgs.csv")))
 
 set.seed(1)
 preobj <- CreatePRECASTObject(seuList = seuList, customGenelist = svgs_before$gene_id,
