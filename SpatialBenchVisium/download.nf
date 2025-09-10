@@ -154,6 +154,8 @@ process download_data {
 
     spe <- logNormCounts(spe)
 
+    colData(spe)[,"key"] <- paste0(colData(spe)[,"sample_id"], "_", colnames(spe))
+
     save(spe, file=here("SpatialBenchVisium","results", "SpatialBenchVisium_spe_qc.Rdata"))
     """
 }
