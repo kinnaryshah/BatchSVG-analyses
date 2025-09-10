@@ -149,11 +149,11 @@ process download_data {
 
     spe <- cbind(spe1,spe2,spe3,spe4)
 
-    rowData(spe)[,"gene_name"] <- rownames(spe)
-    rowData(spe)[,"gene_id"] <- rowData(spe)[,"symbol"]
+    rowData(spe)[,"gene_id"] <- rownames(spe)
+    rowData(spe)[,"gene_name"] <- rowData(spe)[,"symbol"]
 
     spe <- logNormCounts(spe)
 
-    save(spe, file=here("$data_name","results", "${data_name}_spe_qc.Rdata"))
+    save(spe, file=here("SpatialBenchVisium","results", "SpatialBenchVisium_spe_qc.Rdata"))
     """
 }

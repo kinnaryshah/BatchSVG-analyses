@@ -5,9 +5,9 @@
  */
 params.data_name = 'SpatialBenchVisium'
 params.batch = "sample_id"
-params.dev_thres = 10
-params.rank_thres = 5
-params.bias_csv = "./results/humanHippocampus2024_sample_id_10_5_bias_genes.csv"
+params.dev_thres = 4
+params.rank_thres = 7
+params.bias_csv = "./results/SpatialBenchVisium_sample_id_4_7_bias_genes.csv"
 
 // Include modules
 include { download_data } from './download.nf'
@@ -24,10 +24,9 @@ workflow {
 
     // assume I've run 4 download .sh scripts
 
-    download_data(params.data_name)
+    // download_data(params.data_name)
 
-    // normally would have step to run nnSVG, but already have results using
-    // https://github.com/christinehou11/BatchSVG_analysis/blob/main/humanHippocampus2024_sub4_spe.qmd#L71
+    // run nnSVG shell script
 
     // feat_sel(params.data_name, params.batch)
 
@@ -38,11 +37,11 @@ workflow {
     // from nextflow tutorial: create a channel for inputs from a CSV file
     // bias_gene_ch = Channel.fromPath(params.bias_csv)
     //                    .splitCsv()
-    //                     .map { line -> line[0] }
+    //                    .map { line -> line[0] }
 
     // spot_plot_bias(params.data_name, bias_gene_ch)
     // bar_plot_bias(params.data_name, bias_gene_ch)
 
-    // filter_out(params.data_name, params.batch, params.dev_thres, params.rank_thres)
+    filter_out(params.data_name, params.batch, params.dev_thres, params.rank_thres)
 
 }
