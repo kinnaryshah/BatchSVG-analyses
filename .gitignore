@@ -11,7 +11,7 @@ MouseBrainSerialSagittal-Posterior/results/*.Rdata
 MouseBrainSerialSagittal-Posterior/preprocessed/
 SpatialBenchVisium/preprocessed/
 SpatialBenchVisium/.nextflow/
-SpatialBenchVisium/results/.RData
-SpatialBenchVisium/results/.Rdata
+SpatialBenchVisium/results/*.RData
+SpatialBenchVisium/results/*.Rdata
 
 */.Rhistory
