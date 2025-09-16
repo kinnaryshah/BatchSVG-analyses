@@ -15,6 +15,8 @@ library(tidyverse)
 library(jaffelab)
 library(sessioninfo)
 
+setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
+
 sample_info_path <- here("raw-data", "sample_key_spatial_NAc.csv")
 sample_info_path2 <- here(
     "processed-data", "02_image_stitching", "sample_info_clean.csv"
