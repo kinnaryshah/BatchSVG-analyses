@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=precast
+#SBATCH --job-name=download
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=40G
 #SBATCH --mail-type=END
