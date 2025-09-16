@@ -13,7 +13,7 @@ setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
 data_name <- "spatialLIBD_NAc_Br8325"
 
-load(file=here(data_name,"results",paste0(data_name,"_spe_all.Rdata"))
+load(file=here(data_name,"results",paste0(data_name,"_spe_all.Rdata")))
 
 spe <- spe[,colData(spe)$sample_id %in% c("V13F06-313_C1", "V13M06-376_A1", "V13M06-376_B1", "V13M06-376_C1", "V13M06-376_D1")]
 
@@ -37,4 +37,4 @@ if (sum(ix_zero_spots) > 0) {
 
 print(dim(spe))
 
-save(spe, file=here("data_name","results", paste0(data_name,"_spe_qc.Rdata"))
+save(spe, file=here("data_name","results", paste0(data_name,"_spe_qc.Rdata")))
