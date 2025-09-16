@@ -7,7 +7,7 @@ library(scran)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "SpatialBenchVisium"
+data_name <- "spatialLIBD_NAc_Br8325"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
 colData(spe)$sample_id <- factor(colData(spe)$sample_id)
