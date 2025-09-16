@@ -37,4 +37,4 @@ if (sum(ix_zero_spots) > 0) {
 
 print(dim(spe))
 
-save(spe, file=here("data_name","results", paste0(data_name,"_spe_qc.Rdata")))
+save(spe, file=here(data_name,"results", paste0(data_name,"_spe_qc.Rdata")))
