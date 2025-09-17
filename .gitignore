@@ -13,6 +13,10 @@ SpatialBenchVisium/preprocessed/
 SpatialBenchVisium/.nextflow/
 SpatialBenchVisium/results/*.RData
 SpatialBenchVisium/results/*.Rdata
+SpatialBenchVisium_probe_based/preprocessed/
+SpatialBenchVisium_probe_based/.nextflow/
+SpatialBenchVisium_probe_based/results/*.RData
+SpatialBenchVisium_probe_based/results/*.Rdata
 spatialLIBD_NAc_Br8325/.nextflow/
 spatialLIBD_NAc_Br8325/results/*.RData
 spatialLIBD_NAc_Br8325/results/*.Rdata
