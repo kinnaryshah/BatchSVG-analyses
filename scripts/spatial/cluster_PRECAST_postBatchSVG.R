@@ -8,7 +8,7 @@ library(tidyverse)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "SpatialBenchVisium"
+data_name <- "spatialLIBD_NAc_Br8325"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
 colnames(spe) <- spe$key
@@ -28,7 +28,7 @@ seuList <- unique(spe$sample_id) |>
             project="dACC")
     })
 
-svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_sample_id_4_7_filt_svgs.csv")))
+svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_sample_id_8_5_filt_svgs.csv")))
 
 set.seed(1)
 preobj <- CreatePRECASTObject(seuList = seuList, customGenelist = svgs_after$gene_id,
@@ -37,7 +37,7 @@ preobj@seulist
 
 PRECASTObj <- AddAdjList(preobj, platform = "Visium")
 PRECASTObj <- AddParSetting(PRECASTObj, Sigma_equal = FALSE,  maxIter = 20, verbose = TRUE)
-PRECASTObj <- PRECAST(PRECASTObj, K=7)
+PRECASTObj <- PRECAST(PRECASTObj, K=8)
 PRECASTObj <- SelectModel(PRECASTObj)
 seuInt <- IntegrateSpaData(PRECASTObj, species = "Human")
 
