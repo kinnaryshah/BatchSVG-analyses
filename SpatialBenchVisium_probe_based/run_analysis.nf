@@ -42,6 +42,6 @@ workflow {
     // spot_plot_bias(params.data_name, bias_gene_ch)
     // bar_plot_bias(params.data_name, bias_gene_ch)
 
-    // filter_out(params.data_name, params.batch, params.dev_thres, params.rank_thres)
+    filter_out(params.data_name, params.batch, params.dev_thres, params.rank_thres)
 
 }
