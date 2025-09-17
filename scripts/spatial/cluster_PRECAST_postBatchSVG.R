@@ -37,7 +37,7 @@ preobj@seulist
 
 PRECASTObj <- AddAdjList(preobj, platform = "Visium")
 PRECASTObj <- AddParSetting(PRECASTObj, Sigma_equal = FALSE,  maxIter = 20, verbose = TRUE)
-PRECASTObj <- PRECAST(PRECASTObj, K=8)
+PRECASTObj <- PRECAST(PRECASTObj, K=9)
 PRECASTObj <- SelectModel(PRECASTObj)
 seuInt <- IntegrateSpaData(PRECASTObj, species = "Human")
 
