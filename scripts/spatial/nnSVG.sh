@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=precast
 #SBATCH --cpus-per-task=15
-#SBATCH --mem-per-cpu=20G
+#SBATCH --mem-per-cpu=40G
 #SBATCH --mail-type=END
 #SBATCH --mail-user=kinnaryshahh@gmail.com 
 
