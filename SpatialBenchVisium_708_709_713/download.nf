@@ -47,7 +47,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("OCT_CytAssist_WT_709",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("OCT",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("CytAssist",dim(spe)[2])
+    colData(spe)[,"experiment"] <- rep("probe",dim(spe)[2])
+       
     spe1 <- spe
 
     spe <- read10xVisium(here("SpatialBenchVisium_708_709_713/preprocessed/OCT_WT_709/outs/"),
@@ -77,7 +80,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("OCT_WT_709",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("OCT",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("manual",dim(spe)[2])
+    colData(spe)[,"experiment"] <- rep("polyA",dim(spe)[2])
+       
     spe2 <- spe
 
     spe <- read10xVisium(here("SpatialBenchVisium_708_709_713/preprocessed/FFPE_2_WT_709/outs/"),
@@ -107,7 +113,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("FFPE_2_WT_709",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("FFPE",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("manual",dim(spe)[2])
+    colData(spe)[,"experiment"] <- rep("probe",dim(spe)[2])
+       
     spe3 <- spe
 
     spe <- read10xVisium(here("SpatialBenchVisium_708_709_713/preprocessed/FFPE_CytAssist_WT_709/outs/"),
@@ -137,7 +146,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("FFPE_CytAssist_WT_709",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("FFPE",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("CytAssist",dim(spe)[2])
+    colData(spe)[,"experiment"] <- rep("probe",dim(spe)[2])
+       
     spe4 <- spe    
 
     spe <- read10xVisium(here("SpatialBenchVisium_708_709_713/preprocessed/FFPE_2_WT_708/outs/"),
@@ -167,7 +179,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("FFPE_2_WT_708",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("FFPE",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("manual",dim(spe)[2])
+     colData(spe)[,"experiment"] <- rep("probe",dim(spe)[2])
+      
     spe5 <- spe    
 
 
@@ -198,7 +213,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("OCT_WT_708",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("OCT",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("manual",dim(spe)[2])
+    colData(spe)[,"experiment"] <- rep("polyA",dim(spe)[2])
+       
     spe6 <- spe   
 
 
@@ -229,7 +247,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("FFPE_2_WT_713",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("FFPE",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("manual",dim(spe)[2])
+     colData(spe)[,"experiment"] <- rep("probe",dim(spe)[2])
+      
     spe7 <- spe   
 
 
@@ -260,7 +281,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("OCT_CytAssist_WT_713",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("OCT",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("CytAssist",dim(spe)[2])
+    colData(spe)[,"experiment"] <- rep("probe",dim(spe)[2])
+       
     spe8 <- spe 
 
 
@@ -291,7 +315,10 @@ process download_data {
 
     print(dim(spe))
     colData(spe)[,"sample_id"] <- rep("FFPE_CytAssist_WT_713",dim(spe)[2])
-   
+    colData(spe)[,"preservation"] <- rep("FFPE",dim(spe)[2])
+    colData(spe)[,"placement"] <- rep("CytAssist",dim(spe)[2])
+    colData(spe)[,"experiment"] <- rep("probe",dim(spe)[2])
+       
     spe9 <- spe 
 
     overlap_genes <- Reduce(intersect,  list(v1 = rownames(spe1), 
