@@ -29,7 +29,7 @@ colData(spe)$col <- spe$array_col
 
 metadata(spe)$BayesSpace.data <- list(platform = "Visium", is.enhanced = FALSE)
 
-k=7
+k=6
 message("Running spatialCluster()")
 Sys.time()
 spe <- spatialCluster(spe, use.dimred = "HARMONY", q = k,nrep=10000)
