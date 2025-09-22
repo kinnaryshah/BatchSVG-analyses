@@ -19,9 +19,9 @@ process concat {
     library(BatchSVG)
     library(here)
 
-    df1 <- read.csv(bias_csv1)
-    df2 <- read.csv(bias_csv2)
-    df3 <- read.csv(bias_csv3)
+    df1 <- read.csv(here("$data_name","results", "${data_name}_sample_id_9_5_bias_genes.csv"))
+    df2 <- read.csv(here("$data_name","results", "${data_name}_preservation_7_5_bias_genes.csv"))
+    df3 <- read.csv(here("$data_name","results", "${data_name}_experiment_12_5_bias_genes.csv"))
 
     df <- rbind(df1,df2,df3)
 
