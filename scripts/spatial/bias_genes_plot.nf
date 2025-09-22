@@ -9,6 +9,7 @@ process spot_plot_bias {
 
     input:
         val data_name
+        val batch1
         val bias_gene
 
     script:
@@ -29,7 +30,7 @@ process spot_plot_bias {
         splot <- plotCoords(spe, annotate=$bias_gene, assay="logcounts", 
           sample_id="sample_id", point_size=.1)
 
-        pdf(file=here("$data_name","plots",paste0("spot_plot_${data_name}_",$bias_gene,".pdf"))) # issue with quotation marks around bias_gene val 
+        pdf(file=here("$data_name","plots",paste0("spot_plot_${data_name}_${batch1}_",$bias_gene,".pdf"))) # issue with quotation marks around bias_gene val 
 
         plot(splot)
 
@@ -45,6 +46,7 @@ process bar_plot_bias {
 
     input:
         val data_name
+        val batch1
         val bias_gene
 
     script:
@@ -109,7 +111,7 @@ process bar_plot_bias {
             ggtitle($bias_gene) +
             theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-        pdf(file=here("$data_name","plots",paste0("bar_plot_${data_name}_",$bias_gene,".pdf"))) # issue with quotation marks around bias_gene val 
+        pdf(file=here("$data_name","plots",paste0("bar_plot_${data_name}_${batch1}_",$bias_gene,".pdf"))) # issue with quotation marks around bias_gene val 
 
         plot(plot)
 
