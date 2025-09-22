@@ -1,4 +1,3 @@
-setwd("Desktop/Research/BatchSVG-analyses/")
 library(here)
 library(Seurat)
 library(SpatialExperiment)
@@ -8,6 +7,7 @@ library(tidyverse)
 library(harmony)
 library(scry)
 library(schex)
+library(BayesSpace)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 

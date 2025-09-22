@@ -1,4 +1,3 @@
-setwd("Desktop/Research/BatchSVG-analyses/")
 library(here)
 library(Seurat)
 library(SpatialExperiment)
