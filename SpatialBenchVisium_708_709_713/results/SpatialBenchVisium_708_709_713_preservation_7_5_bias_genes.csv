@@ -1,0 +1,6 @@
+"gene_id","gene_name","nSD_bin_dev","dev_outlier","nSD_bin_rank","rank_outlier"
+"ENSMUSG00000060802","B2m","[7,14]",TRUE,"[0,5)",FALSE
+"ENSMUSG00000028820","Sfpq","[7,14]",TRUE,"[5,10]",TRUE
+"ENSMUSG00000091803","Cox16","[0,7)",FALSE,"[5,10]",TRUE
+"ENSMUSG00000060126","Tpt1","[7,14]",TRUE,"[0,5)",FALSE
+"ENSMUSG00000022336","Eif3e","[0,7)",FALSE,"[5,10]",TRUE
