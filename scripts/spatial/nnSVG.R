@@ -9,6 +9,8 @@ setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
 data_name <- "SpatialBenchVisium_708_709_713"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
+#remove nnSVG error gene
+spe <- spe[rowData(spe)$gene_id != "ENSMUSG00000029547",]
 
 colData(spe)$sample_id <- factor(colData(spe)$sample_id)
 
@@ -48,7 +50,7 @@ for (s in seq_along(sample_ids)) {
 
     # run nnSVG
     set.seed(123)
-    spe_sub <- nnSVG(spe_sub,n_threads=1,verbose=F)
+    spe_sub <- nnSVG(spe_sub,n_threads=15,verbose=F)
 
     # store results for this sample
     res_list[[s]] <- rowData(spe_sub)
