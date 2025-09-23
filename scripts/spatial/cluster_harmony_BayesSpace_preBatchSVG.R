@@ -11,7 +11,7 @@ library(BayesSpace)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "humanHippocampus2024"
+data_name <- "SpatialBenchVisium_708_709_713"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
 svgs_before <- read.csv(file = here(data_name, "results", paste0(data_name, "_svgs.csv")),row.names=1)

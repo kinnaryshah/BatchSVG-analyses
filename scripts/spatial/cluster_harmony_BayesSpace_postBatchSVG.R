@@ -11,10 +11,10 @@ library(BayesSpace)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "humanHippocampus2024"
+data_name <- "SpatialBenchVisium_708_709_713"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
-svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_sample_id_10_5_filt_svgs.csv")),row.names=1)
+svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_concat_filt_svgs.csv")),row.names=1)
 
 set.seed(40)
 spe <- scater::runPCA(spe, ncomponents = 50,
