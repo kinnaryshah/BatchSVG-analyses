@@ -6,7 +6,7 @@
 params.data_name = 'SpatialBenchVisium_709_713'
 params.batch1 = "sample_id"
 params.batch2 = "preservation"
-params.batch3 = "experiment"
+params.batch3 = "placement"
 params.dev_thres1 = 9
 params.rank_thres1 = 5
 params.dev_thres2 = 7
@@ -15,7 +15,7 @@ params.dev_thres3 = 12
 params.rank_thres3 = 5
 params.bias_csv1 = "./results/SpatialBenchVisium_709_713_sample_id_9_5_bias_genes.csv"
 params.bias_csv2 = "./results/SpatialBenchVisium_709_713_preservation_7_5_bias_genes.csv"
-params.bias_csv3 = "./results/SpatialBenchVisium_709_713_experiment_12_5_bias_genes.csv"
+params.bias_csv3 = "./results/SpatialBenchVisium_709_713_placement_12_5_bias_genes.csv"
 params.bias_csv_concat = "SpatialBenchVisium_709_713_concat_bias_genes.csv"
 
 
@@ -36,7 +36,7 @@ workflow {
 
     // assume I've run 4 download .sh scripts
 
-    download_data(params.data_name)
+    // download_data(params.data_name)
 
     // run nnSVG shell script
 
@@ -54,7 +54,7 @@ workflow {
 
     // feat_sel(params.data_name, params.batch3)
 
-    // vis_thres(params.data_name, params.batch3, params.dev_thres3, params.rank_thres3)
+    vis_thres(params.data_name, params.batch3, params.dev_thres3, params.rank_thres3)
 
     // bias(params.data_name, params.batch3, params.dev_thres3, params.rank_thres3)
 
