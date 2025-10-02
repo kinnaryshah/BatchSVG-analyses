@@ -11,6 +11,7 @@ data_name <- "SpatialBenchVisium_709_713"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 #remove nnSVG error gene
 spe <- spe[rowData(spe)$gene_id != "ENSMUSG00000029547",]
+spe <- spe[rowData(spe)$gene_id != "ENSMUSG00000042066",]
 
 colData(spe)$sample_id <- factor(colData(spe)$sample_id)
 
