@@ -22,6 +22,10 @@ SpatialBenchVisium_709_713/preprocessed/
 SpatialBenchVisium_709_713/.nextflow/
 SpatialBenchVisium_709_713/results/*.RData
 SpatialBenchVisium_709_713/results/*.Rdata
+SpatialBenchVisium_709_713_FFPE/preprocessed/
+SpatialBenchVisium_709_713_FFPE/.nextflow/
+SpatialBenchVisium_709_713_FFPE/results/*.RData
+SpatialBenchVisium_709_713_FFPE/results/*.Rdata
 spatialLIBD_NAc_Br8325/.nextflow/
 spatialLIBD_NAc_Br8325/results/*.RData
 spatialLIBD_NAc_Br8325/results/*.Rdata
