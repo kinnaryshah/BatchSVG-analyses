@@ -7,7 +7,7 @@ library(scran)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "SpatialBenchVisium_708_709_713"
+data_name <- "SpatialBenchVisium_709_713"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 #remove nnSVG error gene
 spe <- spe[rowData(spe)$gene_id != "ENSMUSG00000029547",]
