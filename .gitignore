@@ -30,7 +30,12 @@ SpatialBenchVisium_709_710_713_FFPE_manual/preprocessed/
 SpatialBenchVisium_709_710_713_FFPE_manual/.nextflow/
 SpatialBenchVisium_709_710_713_FFPE_manual/results/*.RData
 SpatialBenchVisium_709_710_713_FFPE_manual/results/*.Rdata
+SpatialBenchVisium_460_462_463_FFPE_manual/preprocessed/
+SpatialBenchVisium_460_462_463_FFPE_manual/.nextflow/
+SpatialBenchVisium_460_462_463_FFPE_manual/results/*.RData
+SpatialBenchVisium_460_462_463_FFPE_manual/results/*.Rdata
 spatialLIBD_NAc_Br8325/.nextflow/
 spatialLIBD_NAc_Br8325/results/*.RData
 spatialLIBD_NAc_Br8325/results/*.Rdata
 */.Rhistory
+.Rproj.user
