@@ -1,0 +1,7 @@
+"gene_id","gene_name","nSD_bin_dev","dev_outlier","nSD_bin_rank","rank_outlier"
+"ENSMUSG00000027215","Cd82","[0,12]",FALSE,"[5,10)",TRUE
+"ENSMUSG00000036896","C1qc","[0,12]",FALSE,"[5,10)",TRUE
+"ENSMUSG00000036887","C1qa","[0,12]",FALSE,"[5,10)",TRUE
+"ENSMUSG00000037012","Hk1","[0,12]",FALSE,"[5,10)",TRUE
+"ENSMUSG00000025574","Tk1","[0,12]",FALSE,"[5,10)",TRUE
+"ENSMUSG00000055447","Cd47","[0,12]",FALSE,"[10,15]",TRUE

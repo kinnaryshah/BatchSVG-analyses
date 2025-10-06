@@ -4,10 +4,10 @@
  * Pipeline parameters
  */
 params.data_name = 'SpatialBenchVisium_709_710_713_FFPE_manual'
-params.batch = "placement"
+params.batch = "sample_id"
 params.dev_thres = 12
 params.rank_thres = 5
-params.bias_csv = "./results/SpatialBenchVisium_709_710_713_FFPE_manual_placement_12_5_bias_genes.csv"
+params.bias_csv = "./results/SpatialBenchVisium_709_710_713_FFPE_manual_sample_id_12_5_bias_genes.csv"
 
 // Include modules
 include { download_data } from './download.nf'
@@ -24,7 +24,7 @@ workflow {
 
     // assume I've run 4 download .sh scripts
 
-    download_data(params.data_name)
+    // download_data(params.data_name)
 
     // run nnSVG shell script
 
@@ -42,6 +42,6 @@ workflow {
     // spot_plot_bias(params.data_name, params.batch, bias_gene_ch)
     // bar_plot_bias(params.data_name, params.batch, bias_gene_ch)
 
-    // filter_out(params.data_name, params.batch, params.dev_thres, params.rank_thres)
+    filter_out(params.data_name, params.batch, params.dev_thres, params.rank_thres)
 
 }
