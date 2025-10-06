@@ -18,6 +18,10 @@ SpatialBenchVisium_probe_based/preprocessed/
 SpatialBenchVisium_probe_based/.nextflow/
 SpatialBenchVisium_probe_based/results/*.RData
 SpatialBenchVisium_probe_based/results/*.Rdata
+SpatialBenchVisium_OCT_manual/preprocessed/
+SpatialBenchVisium_OCT_manual/.nextflow/
+SpatialBenchVisium_OCT_manual/results/*.RData
+SpatialBenchVisium_OCT_manual/results/*.Rdata
 SpatialBenchVisium_709_713/preprocessed/
 SpatialBenchVisium_709_713/.nextflow/
 SpatialBenchVisium_709_713/results/*.RData
