@@ -11,10 +11,10 @@ library(BayesSpace)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "SpatialBenchVisium_709_713_FFPE"
+data_name <- "SpatialBenchVisium_709_710_713_FFPE_manual"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
-svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_placement_12_5_filt_svgs.csv")),row.names=1)
+svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_sample_id_12_5_filt_svgs.csv")),row.names=1)
 
 set.seed(40)
 spe <- scater::runPCA(spe, ncomponents = 50,
