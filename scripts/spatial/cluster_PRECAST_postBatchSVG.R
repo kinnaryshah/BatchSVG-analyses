@@ -8,15 +8,15 @@ library(tidyverse)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "SpatialBenchVisium_709_710_713_FFPE_manual"
+data_name <- "spatialLIBD_DLPFC_12"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
 colnames(spe) <- spe$key
 
-seuList <- unique(spe$sample_id) |>
-    set_names(unique(spe$sample_id)) |>
+seuList <- unique(spe$subject) |>
+    set_names(unique(spe$subject)) |>
     map(.f = function(id) {
-        tmp_spe <- spe[, spe$sample_id == id]
+        tmp_spe <- spe[, spe$subject == id]
 
         tmp_spe$row <- tmp_spe$array_row
         tmp_spe$col <- tmp_spe$array_col
@@ -28,7 +28,7 @@ seuList <- unique(spe$sample_id) |>
             project="dACC")
     })
 
-svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_sample_id_12_5_filt_svgs.csv")))
+svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_subject_10_5_filt_svgs.csv")))
 
 set.seed(1)
 preobj <- CreatePRECASTObject(seuList = seuList, customGenelist = svgs_after$gene_id,
@@ -37,7 +37,7 @@ preobj@seulist
 
 PRECASTObj <- AddAdjList(preobj, platform = "Visium")
 PRECASTObj <- AddParSetting(PRECASTObj, Sigma_equal = FALSE,  maxIter = 20, verbose = TRUE)
-PRECASTObj <- PRECAST(PRECASTObj, K=6)
+PRECASTObj <- PRECAST(PRECASTObj, K=8)
 PRECASTObj <- SelectModel(PRECASTObj)
 seuInt <- IntegrateSpaData(PRECASTObj, species = "Human")
 
@@ -54,4 +54,4 @@ col_data_df <- colData(spe) |>
 rownames(col_data_df) <- colnames(spe)
 colData(spe)$PRECAST_cluster <- col_data_df$PRECAST_cluster
 
-save(spe, file = here(data_name, "results", paste0(data_name, "_spe_PRECAST_postBatchSVG.Rdata")))
+save(spe, file = here(data_name, "results", paste0(data_name, "_spe_PRECAST_postBatchSVG_8.Rdata")))
