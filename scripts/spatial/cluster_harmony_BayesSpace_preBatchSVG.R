@@ -29,7 +29,7 @@ colData(spe)$col <- spe$array_col
 
 metadata(spe)$BayesSpace.data <- list(platform = "Visium", is.enhanced = FALSE)
 
-k=7
+k=8
 message("Running spatialCluster()")
 Sys.time()
 spe <- spatialCluster(spe, use.dimred = "HARMONY", q = k,nrep=10000)
@@ -38,4 +38,4 @@ Sys.time()
 bayesSpace_name <- paste0("bayesSpace_captureArea_", k)
 colnames(colData(spe))[ncol(colData(spe))] <- bayesSpace_name
 
-save(spe, file = here(data_name, "results", paste0(data_name, "_spe_harmony_BayesSpace_preBatchSVG_7.Rdata")))
+save(spe, file = here(data_name, "results", paste0(data_name, "_spe_harmony_BayesSpace_preBatchSVG_8.Rdata")))
