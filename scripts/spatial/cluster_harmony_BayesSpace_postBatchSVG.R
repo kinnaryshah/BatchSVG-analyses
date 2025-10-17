@@ -11,10 +11,10 @@ library(BayesSpace)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "spatialLIBD_DLPFC_12"
+data_name <- "spatialLIBD_DLPFC_12_3_7_12"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
-svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_subject_4_7_filt_svgs.csv")),row.names=3)
+svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_subject_7_7_filt_svgs.csv")),row.names=3)
 
 set.seed(40)
 spe <- scater::runPCA(spe, ncomponents = 50,
@@ -29,7 +29,7 @@ colData(spe)$col <- spe$array_col
 
 metadata(spe)$BayesSpace.data <- list(platform = "Visium", is.enhanced = FALSE)
 
-k=8
+k=7
 message("Running spatialCluster()")
 Sys.time()
 spe <- spatialCluster(spe, use.dimred = "HARMONY", q = k,nrep=10000)
@@ -38,4 +38,4 @@ Sys.time()
 bayesSpace_name <- paste0("bayesSpace_captureArea_", k)
 colnames(colData(spe))[ncol(colData(spe))] <- bayesSpace_name
 
-save(spe, file = here(data_name, "results", paste0(data_name, "_spe_harmony_BayesSpace_postBatchSVG_8.Rdata")))
+save(spe, file = here(data_name, "results", paste0(data_name, "_spe_harmony_BayesSpace_postBatchSVG_7.Rdata")))
