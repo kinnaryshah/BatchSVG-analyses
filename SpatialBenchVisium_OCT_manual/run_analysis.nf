@@ -30,7 +30,7 @@ workflow {
 
     // feat_sel(params.data_name, params.batch)
 
-    // vis_thres(params.data_name, params.batch, params.dev_thres, params.rank_thres)
+    vis_thres(params.data_name, params.batch, params.dev_thres, params.rank_thres)
 
     // bias(params.data_name, params.batch, params.dev_thres, params.rank_thres)
 
