@@ -11,7 +11,7 @@ library(BayesSpace)
 
 setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 
-data_name <- "spatialLIBD_DLPFC_12_3_7_12"
+data_name <- "spatialLIBD_DLPFC_12_3_7_12_expanded"
 load(file = here(data_name, "results", paste0(data_name, "_spe_qc.Rdata")))
 
 svgs_after <- read.csv(file = here(data_name, "results", paste0(data_name, "_subject_7_7_filt_svgs.csv")),row.names=1)
