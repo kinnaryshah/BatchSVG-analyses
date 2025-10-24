@@ -56,72 +56,43 @@ for (s in seq_along(sample_ids)) {
 
 save(res_list, file=here(data_name,"results","res_list_intermediate_expanded.Rdata"))
 
-sapply(res_list, nrow)
-
 # match results from each sample and store in matching rows
-res_ranks <- matrix(NA, nrow = nrow(spe), ncol = length(sample_ids))
-rownames(res_ranks) <- rownames(spe)
-colnames(res_ranks) <- sample_ids
+res_ps <- matrix(NA, nrow = nrow(spe), ncol = length(sample_ids))
+rownames(res_ps) <- rownames(spe)
+colnames(res_ps) <- sample_ids
+
 
 for (s in seq_along(sample_ids)) {
-    stopifnot(colnames(res_ranks)[s] == sample_ids[s])
-    stopifnot(colnames(res_ranks)[s] == names(res_list)[s])
-
-    rownames_s <- rownames(res_list[[s]])
-    res_ranks[rownames_s, s] <- res_list[[s]][, "rank"]
+  stopifnot(colnames(res_ps)[s] == sample_ids[s])
+  stopifnot(colnames(res_ps)[s] == names(res_list)[s])
+  
+  rownames_s <- rownames(res_list[[s]])
+  res_ps[rownames_s, s] <- res_list[[s]][, "padj"]
 }
 
+n_signif <- apply(res_ps, 1, function(r) sum(r < 0.05, na.rm = TRUE))
+
+
 # remove genes that were filtered out in all samples
-ix_allna <- apply(res_ranks, 1, function(r) all(is.na(r)))
-res_ranks <- res_ranks[!ix_allna, ]
+ix_allna <- apply(res_ps, 1, function(r) all(is.na(r)))
+res_ps <- res_ps[!ix_allna, ]
 
-dim(res_ranks)
-
-avg_ranks <- rowMeans(res_ranks, na.rm = TRUE)
-
-# calculate number of samples where each gene is within top 1000 ranked SVGs
-# for that sample
-n_withinTop1000 <- apply(res_ranks, 1, function(r) sum(r <= 1000, na.rm = TRUE))
-
+dim(res_ps)
 
 # summary table
 df_summary <- data.frame(
-    gene_id = names(avg_ranks),
-    gene_name = rowData(spe)[names(avg_ranks), "gene_name"],
-    overall_rank = rank(avg_ranks),
-    average_rank = unname(avg_ranks),
-    n_withinTop1000 = unname(n_withinTop1000),
-    row.names = names(avg_ranks)
+    gene_id = rownames(res_ps),
+    gene_name = rowData(spe)[rownames(res_ps), "gene_name"],
+    n_signif = unname(n_signif),
+    row.names = rownames(res_ps)
 )
-
-# sort by average rank
-df_summary <- df_summary[order(df_summary$average_rank), ]
-head(df_summary)
-
-# calculate number of samples where each gene is within top 1000 ranked SVGs
-# for that sample
-n_withinTop1000 <- apply(res_ranks, 1, function(r) sum(r <= 1000, na.rm = TRUE))
-
-
-# top n genes
-# (note: NAs in this example due to subsampling genes for faster runtime)
-top1000genes <- df_summary$gene_name[1:1000]
 
 # summary table of "replicated" SVGs (i.e. genes that are highly ranked in at
 # least x samples)
-df_summaryReplicated <- df_summary[df_summary$n_withinTop1000 >= 2, ]
-
-# re-calculate rank within this set
-df_summaryReplicated$overall_rank <- rank(df_summaryReplicated$average_rank)
+df_summaryReplicated <- df_summary[df_summary$n_signif >= 2, ]
 
 dim(df_summaryReplicated)
 
 head(df_summaryReplicated)
 
-# top "replicated" SVGs
-topSVGsReplicated <- df_summaryReplicated$gene_name
-
-save(res_ranks,topSVGsReplicated,df_summaryReplicated,df_summary,top1000genes,
-     file=here::here(data_name, "results",paste0(data_name,'_nnSVG_1000_expanded.rda')))
-
-write.csv(df_summaryReplicated, here(data_name, "results", paste0(data_name, "_svgs_expanded.csv")))
+write.csv(df_summaryReplicated, here(data_name, "results", paste0(data_name, "_expanded_svgs.csv")))
