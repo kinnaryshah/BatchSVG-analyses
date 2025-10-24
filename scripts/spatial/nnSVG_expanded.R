@@ -95,4 +95,8 @@ dim(df_summaryReplicated)
 
 head(df_summaryReplicated)
 
+# remove mito genes
+is_mito <- grepl("(^MT-)|(^mt-)", df_summaryReplicated$gene_name)
+df_summaryReplicated <- df_summaryReplicated[!is_mito,]
+
 write.csv(df_summaryReplicated, here(data_name, "results", paste0(data_name, "_expanded_svgs.csv")))
