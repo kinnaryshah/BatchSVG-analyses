@@ -1,0 +1,5 @@
+"gene_id","gene_name","nSD_bin_dev","dev_outlier","nSD_bin_rank","rank_outlier"
+"ENSG00000255823","MTRNR2L8","[35,42]",TRUE,"[0,9)",FALSE
+"ENSG00000105695","MAG","[0,7)",FALSE,"[9,18]",TRUE
+"ENSG00000178980","SELENOW","[0,7)",FALSE,"[9,18]",TRUE
+"ENSG00000183036","PCP4","[0,7)",FALSE,"[9,18]",TRUE
