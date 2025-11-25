@@ -1,7 +1,0 @@
-"gene_id","gene_name","nSD_bin_dev","dev_outlier","nSD_bin_rank","rank_outlier"
-"ENSMUSG00000028931","Kcnab2","[0,10]",FALSE,"[5,10)",TRUE
-"ENSMUSG00000040952","Rps19","[0,10]",FALSE,"[5,10)",TRUE
-"ENSMUSG00000074129","Rpl13a","[0,10]",FALSE,"[10,15]",TRUE
-"ENSMUSG00000093674","Rpl41","[0,10]",FALSE,"[5,10)",TRUE
-"ENSMUSG00000038976","Ppp1r9b","[0,10]",FALSE,"[5,10)",TRUE
-"ENSMUSG00000025290","Rps24","[0,10]",FALSE,"[5,10)",TRUE
