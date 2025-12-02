@@ -33,6 +33,13 @@ spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 5] <- "DG GCL"
 spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 6] <- "CA3"
 spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 7] <- "WM"
 
+spe_pre$sample_id <- unfactor(spe_pre$sample_id)
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-333_B1"] <- "Br3942 (1)"
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-333_D1"] <- "Br3942 (2)"
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-335_D1"] <- "Br8325"
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-336_A1"] <- "Br8667"
+spe_pre$sample_id <- as.factor(spe_pre$sample_id)
+
 load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_postBatchSVG.Rdata"))
 spe_post <- spe
 spe_post$PRECAST_cluster <- unfactor(spe_post$PRECAST_cluster)
@@ -43,6 +50,13 @@ spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 4] <- "DG GCL"
 spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 5] <- "CA1 (2)"
 spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 6] <- "CA3"
 spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 7] <- "CA1"
+
+spe_post$sample_id <- unfactor(spe_post$sample_id)
+spe_post$sample_id[spe_post$sample_id == "V11L05-333_B1"] <- "Br3942 (1)"
+spe_post$sample_id[spe_post$sample_id == "V11L05-333_D1"] <- "Br3942 (2)"
+spe_post$sample_id[spe_post$sample_id == "V11L05-335_D1"] <- "Br8325"
+spe_post$sample_id[spe_post$sample_id == "V11L05-336_A1"] <- "Br8667"
+
 
 svgs <- read.csv(here("humanHippocampus2024","results","humanHippocampus2024_svgs.csv"), row.names=1,
                  check.names=F)
@@ -174,7 +188,7 @@ png(here(data_name,"plots","PRECAST_cluster_pre_clusters.png"),height=5,width=8,
 
 p <- plotCoords(spe_pre,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
                 pal=colors_pre) +
-  ggtitle("Domains With All SVGs") +
+  ggtitle("Domains Before BatchSVG") +
   labs(color = "PRECAST Cluster")
 
 p +
@@ -190,7 +204,7 @@ png(here(data_name,"plots","PRECAST_cluster_post_clusters.png"),height=5,width=8
 
 p <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
                 pal=colors_post) +
-  ggtitle("Domains Without BatchSVGs") +
+  ggtitle("Domains After BatchSVG") +
   labs(color = "PRECAST Cluster")
 
 p +
@@ -305,12 +319,11 @@ spe_post <- scuttle::addPerCellQC(
 )
 
 p1 <- plotColData(spe_pre, x = "PRECAST_cluster", y = "subsets_Mito_percent", colour_by = "PRECAST_cluster") +
-  scale_color_manual(values=colors_pre) +
+  scale_color_manual(values = colors_pre) +
   xlab("") +
   ylab("Mito Percent") +
   labs(colour = "PRECAST Domain\nBefore BatchSVG") +
-  theme(
-    axis.ticks.x=element_blank())
+  theme(axis.ticks.x = element_blank())
 
 p2 <- plotColData(spe_post, x = "PRECAST_cluster", y = "subsets_Mito_percent", colour_by = "PRECAST_cluster") +
   scale_color_manual(values=colors_post) +
@@ -359,11 +372,97 @@ wrap_plots(p1,p3,p5,p2,p4,p6,
 
 dev.off()
 
-# remove NAs to use aricode() package
-na_idx <- is.na(spe_pre$cell_type)
-NMI(spe_pre$cell_type[!na_idx],spe_pre$cluster[!na_idx])
+# vis QC metrics for only DG subdomains
 
-NMI(spe_post$cell_type[!na_idx],spe_post$cluster[!na_idx])
+spe_pre_sub <- spe_pre[,spe_pre$PRECAST_cluster %in% c("DG GCL","DG ML")]
+spe_post_sub <- spe_post[,spe_post$PRECAST_cluster %in% c("DG GCL","DG ML")]
+
+p1 <- plotColData(spe_pre_sub, x = "PRECAST_cluster", y = "subsets_Mito_percent", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values = colors_pre) +
+  xlab("") +
+  ylab("Mito Percent (Before BatchSVG)") +
+  labs(colour = "PRECAST Domain\nBefore BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,55) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p2 <- plotColData(spe_post_sub, x = "PRECAST_cluster", y = "subsets_Mito_percent", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_post) +
+  xlab("") +
+  ylab("Mito Percent (After BatchSVG)") +
+  labs(colour = "PRECAST Domain\nAfter BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,55) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p3 <- plotColData(spe_pre_sub, x = "PRECAST_cluster", y = "sum", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_pre) +
+  xlab("") +
+  ylab("Sum (Before BatchSVG)") +
+  labs(colour = "PRECAST Domain\nBefore BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,61000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p4 <- plotColData(spe_post_sub, x = "PRECAST_cluster", y = "sum", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_post) +
+  xlab("") +
+  ylab("Sum (After BatchSVG)") +
+  labs(colour = "PRECAST Domain\nAfter BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,61000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p5 <- plotColData(spe_pre_sub, x = "PRECAST_cluster", y = "detected", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_pre) +
+  xlab("") +
+  ylab("Detected (Before BatchSVG)") +
+  labs(colour = "PRECAST Domain\nBefore BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,8000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p6 <- plotColData(spe_post_sub, x = "PRECAST_cluster", y = "detected", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_post) +
+  xlab("") +
+  ylab("Detected (After BatchSVG)") +
+  labs(colour = "PRECAST Domain\nAfter BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,8000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+png(here(data_name,"plots","PRECAST_cluster_7_qc_violins_DG_only.png"),height=4.5,width=12,unit="in",res=300)
+
+wrap_plots(p1,p3,p5,p2,p4,p6,
+           guides="collect") 
+
+dev.off()
+
+# remove NAs to use aricode() package
+# use domain for data-driven annotation
+na_idx <- is.na(spe_pre$domain)
+NMI(spe_pre$PRECAST_cluster[!na_idx],spe_pre$domain[!na_idx])
+
+na_idx <- is.na(spe_post$domain)
+NMI(spe_post$PRECAST_cluster[!na_idx],spe_post$domain[!na_idx])
 
 
 # sil plots for pre 
@@ -429,7 +528,7 @@ p1 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
   theme_bw() +
   ylim(-0.6, 0.5) +
   xlab("Cluster") +
-  ylab("Silhouette Width (All SVGs)") +
+  ylab("Silhouette Width (Before BatchSVG)") +
   labs(colour = "Closest Domain\nBefore BatchSVG")
 
 p1
@@ -502,7 +601,7 @@ p2 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
   theme_bw() +
   ylim(-0.6,0.5) +
   xlab("Cluster") +
-  ylab("Silhouette Width (Without BatchSVGs)") +
+  ylab("Silhouette Width (After BatchSVG)") +
   labs(colour = "Closest Domain\nAfter BatchSVG")
 
 data_name = "humanHippocampus2024"
@@ -515,6 +614,43 @@ dev.off()
 
 # get percentage of GCL spots in cluster 5
 
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_preBatchSVG_anno.Rdata"))
+spe_pre <- spe
+spe_pre$PRECAST_cluster <- unfactor(spe_pre$PRECAST_cluster)
+spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 1] <- "CA1"
+spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 2] <- "WM (2)"
+spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 3] <- "SR/SL"
+spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 4] <- "DG ML"
+spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 5] <- "DG GCL"
+spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 6] <- "CA3"
+spe_pre$PRECAST_cluster[spe_pre$PRECAST_cluster == 7] <- "WM"
+
+spe_pre$sample_id <- unfactor(spe_pre$sample_id)
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-333_B1"] <- "Br3942 (1)"
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-333_D1"] <- "Br3942 (2)"
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-335_D1"] <- "Br8325"
+spe_pre$sample_id[spe_pre$sample_id == "V11L05-336_A1"] <- "Br8667"
+spe_pre$sample_id <- as.factor(spe_pre$sample_id)
+
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_postBatchSVG_anno.Rdata"))
+spe_post <- spe
+spe_post$PRECAST_cluster <- unfactor(spe_post$PRECAST_cluster)
+spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 1] <- "WM"
+spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 2] <- "SR/SL"
+spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 3] <- "DG ML"
+spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 4] <- "DG GCL"
+spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 5] <- "CA1 (2)"
+spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 6] <- "CA3"
+spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 7] <- "CA1"
+
+spe_post$sample_id <- unfactor(spe_post$sample_id)
+spe_post$sample_id[spe_post$sample_id == "V11L05-333_B1"] <- "Br3942 (1)"
+spe_post$sample_id[spe_post$sample_id == "V11L05-333_D1"] <- "Br3942 (2)"
+spe_post$sample_id[spe_post$sample_id == "V11L05-335_D1"] <- "Br8325"
+spe_post$sample_id[spe_post$sample_id == "V11L05-336_A1"] <- "Br8667"
+
+
+# using manual annotations
 df1 <- as.data.frame(colData(spe_pre)) %>%
   group_by(sample_id) %>%
   count(histo_annotation) %>%
@@ -556,12 +692,61 @@ df2_final %>%
 dev.off()
 
 
+
+# using data-driven annotations
+df1 <- as.data.frame(colData(spe_pre)) %>%
+  group_by(sample_id) %>%
+  count(domain) %>%
+  filter(domain == "GCL")
+
+df2 <- as.data.frame(colData(spe_pre)) %>%
+  group_by(sample_id) %>%
+  count(domain, PRECAST_cluster) %>%
+  filter(domain == "GCL") %>%
+  filter(PRECAST_cluster == "DG GCL")
+
+df2$total <- df1$n
+df2$percent_pre <- df2$n/df2$total
+df2_final <- df2
+
+df2 <- as.data.frame(colData(spe_post)) %>%
+  group_by(sample_id) %>%
+  count(domain, PRECAST_cluster) %>%
+  filter(domain == "GCL") %>%
+  filter(PRECAST_cluster == "DG GCL")
+
+df2$total <- df1$n
+df2$percent_post <- df2$n/df2$total
+
+df2_final$percent_post <- df2$percent_post
+
+png(here(data_name,"plots","PRECAST_cluster_anno_bar_data-driven.png"),height=4,width=6,unit="in",res=300)
+
+df2_final %>%
+  pivot_longer(cols=starts_with("percent_"),values_to = "percent",names_to = "pre_post") %>%
+  ggplot(aes(x=sample_id, y=percent, fill=pre_post)) +
+  geom_bar(stat="identity", position="dodge") +
+  labs(title = "Data-Driven Annotations in DG GCL",fill="BatchSVG\nused?") +
+  xlab("Sample ID") +
+  ylab("% Annotated DG GCL Spots") +
+  scale_fill_manual(labels=c("Yes","No"),values=c("black","grey")) + 
+  theme_bw()
+
+dev.off()
+
 # vis batch-biased SVGs
 
 
 
 load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_qc.Rdata"))
 print(dim(spe))
+
+spe$sample_id <- unfactor(spe$sample_id)
+spe$sample_id[spe$sample_id == "V11L05-333_B1"] <- "Br3942 (1)"
+spe$sample_id[spe$sample_id == "V11L05-333_D1"] <- "Br3942 (2)"
+spe$sample_id[spe$sample_id == "V11L05-335_D1"] <- "Br8325"
+spe$sample_id[spe$sample_id == "V11L05-336_A1"] <- "Br8667"
+spe$sample_id <- as.factor(spe$sample_id)
 
 
 splot1 <- plotCoords(spe, annotate="ENSG00000104327", assay="logcounts", 
@@ -600,6 +785,59 @@ data_name = "humanHippocampus2024"
 png(here(data_name,"plots","spot_plot_NPAS4.png"),height=5,width=8,unit="in",res=300)
 
 splot2
+
+dev.off()
+
+
+
+splot1 <- plotCoords(spe, annotate="ENSG00000256618", assay="logcounts", 
+                     sample_id="sample_id", point_size=.1,
+                     pal=c("white","black")) +
+  labs(color="logcounts", title = bquote(italic(MTRNR2L1)))
+
+splot1 <- splot1 +
+  facet_wrap(
+    "sample_id",
+    nrow = 1
+  )
+
+splot2 <- plotCoords(spe, annotate="ENSG00000123358", assay="logcounts", 
+                     sample_id="sample_id", point_size=.1,
+                     pal=c("white","black")) +
+  labs(color="logcounts", title = bquote(italic(NR4A1)))
+
+splot2 <- splot2 +
+  facet_wrap(
+    "sample_id",
+    nrow = 1
+  )
+
+splot3 <- plotCoords(spe, annotate="ENSG00000229807", assay="logcounts", 
+                     sample_id="sample_id", point_size=.1,
+                     pal=c("white","black")) +
+  labs(color="logcounts", title = bquote(italic(XIST)))
+
+splot3 <- splot3 +
+  facet_wrap(
+    "sample_id",
+    nrow = 1
+  )
+
+splot4 <- plotCoords(spe, annotate="ENSG00000170345", assay="logcounts", 
+                     sample_id="sample_id", point_size=.1,
+                     pal=c("white","black")) +
+  labs(color="logcounts", title = bquote(italic(FOS)))
+
+splot4 <- splot4 +
+  facet_wrap(
+    "sample_id",
+    nrow = 1
+  )
+
+data_name = "humanHippocampus2024"
+png(here(data_name,"plots","spot_plots_supp_HPC.png"),height=8,width=8,unit="in",res=300)
+
+wrap_plots(splot1,splot2,splot3,splot4,nrow=4)
 
 dev.off()
 

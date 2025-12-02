@@ -172,7 +172,7 @@ png(here(data_name,"plots","PRECAST_cluster_7_pre_clusters.png"),height=5,width=
 
 p <- plotCoords(spe_pre,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
                 pal=colors_pre) +
-  ggtitle("Domains With All SVGs") +
+  ggtitle("Domains Before BatchSVG") +
   labs(color = "PRECAST Cluster")
 
 p +
@@ -189,7 +189,7 @@ png(here(data_name,"plots","PRECAST_cluster_7_post_clusters.png"),height=5,width
 
 p <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
                 pal=colors_post) +
-  ggtitle("Domains Without BatchSVGs") +
+  ggtitle("Domains After BatchSVG") +
   labs(color = "PRECAST Cluster")
 
 
@@ -351,12 +351,98 @@ wrap_plots(p1,p3,p5,p2,p4,p6,
            guides="collect") 
 dev.off()
 
-# remove NAs to use aricode() package
-na_idx <- is.na(spe_pre$cell_type)
-NMI(spe_pre$cell_type[!na_idx],spe_pre$cluster[!na_idx])
+# vis QC metrics for only pink/green subdomains
 
-na_idx <- is.na(spe_post$cell_type)
-NMI(spe_post$cell_type[!na_idx],spe_post$cluster[!na_idx])
+spe_pre_sub <- spe_pre[,spe_pre$PRECAST_cluster %in% c("L3/4/5/6 (1)","L3/4/5/6 (2)")]
+spe_post_sub <- spe_post[,spe_post$PRECAST_cluster %in% c("L3/4","L5/6")]
+
+p1 <- plotColData(spe_pre_sub, x = "PRECAST_cluster", y = "subsets_Mito_percent", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values = colors_pre) +
+  xlab("") +
+  ylab("Mito Percent (Before BatchSVG)") +
+  labs(colour = "PRECAST Domain\nBefore BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,55) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p2 <- plotColData(spe_post_sub, x = "PRECAST_cluster", y = "subsets_Mito_percent", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_post) +
+  xlab("") +
+  ylab("Mito Percent (After BatchSVG)") +
+  labs(colour = "PRECAST Domain\nAfter BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,55) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p3 <- plotColData(spe_pre_sub, x = "PRECAST_cluster", y = "sum", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_pre) +
+  xlab("") +
+  ylab("Sum (Before BatchSVG)") +
+  labs(colour = "PRECAST Domain\nBefore BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,61000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p4 <- plotColData(spe_post_sub, x = "PRECAST_cluster", y = "sum", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_post) +
+  xlab("") +
+  ylab("Sum (After BatchSVG)") +
+  labs(colour = "PRECAST Domain\nAfter BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,61000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p5 <- plotColData(spe_pre_sub, x = "PRECAST_cluster", y = "detected", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_pre) +
+  xlab("") +
+  ylab("Detected (Before BatchSVG)") +
+  labs(colour = "PRECAST Domain\nBefore BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,8000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+p6 <- plotColData(spe_post_sub, x = "PRECAST_cluster", y = "detected", colour_by = "PRECAST_cluster",
+                  other_fields = list(sample_id = "sample_id")) +
+  scale_color_manual(values=colors_post) +
+  xlab("") +
+  ylab("Detected (After BatchSVG)") +
+  labs(colour = "PRECAST Domain\nAfter BatchSVG") +
+  facet_wrap(~ sample_id, nrow=1) +
+  ylim(0,8000) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+png(here(data_name,"plots","PRECAST_cluster_7_qc_violins_pink_green_only.png"),height=4.5,width=12,unit="in",res=300)
+
+wrap_plots(p1,p3,p5,p2,p4,p6,
+           guides="collect") 
+
+dev.off()
+
+
+
+# remove NAs to use aricode() package
+na_idx <- is.na(spe_pre$layer_guess_reordered)
+NMI(spe_pre$PRECAST_cluster[!na_idx],spe_pre$layer_guess_reordered[!na_idx])
+
+na_idx <- is.na(spe_post$layer_guess_reordered)
+NMI(spe_post$PRECAST_cluster[!na_idx],spe_post$layer_guess_reordered[!na_idx])
 
 
 
@@ -422,7 +508,7 @@ p1 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
   theme_bw() +
   ylim(-0.6, 0.5) +
   xlab("Cluster") +
-  ylab("Silhouette Width (All SVGs)") +
+  ylab("Silhouette Width (Before BatchSVG)") +
   labs(colour = "Closest Domain\nBefore BatchSVG")
 
 
@@ -493,7 +579,7 @@ p2 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
   theme_bw() +
   ylim(-0.6,0.5) +
   xlab("Cluster") +
-  ylab("Silhouette Width (Without BatchSVGs)") +
+  ylab("Silhouette Width (After BatchSVG)") +
   labs(colour = "Closest Domain\nAfter BatchSVG")
 
 
