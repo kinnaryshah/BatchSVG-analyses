@@ -168,10 +168,10 @@ colors_post <- setNames(colors_post, c("WM","WM (2)","L2","L5/6","L3/4","L1"))
 # vis PRECAST clusters
 
 data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
-png(here(data_name,"plots","PRECAST_cluster_7_pre_clusters.png"),height=5,width=6,unit="in",res=300)
+png(here(data_name,"plots","PRECAST_cluster_7_pre_clusters.png"),height=6,width=7,unit="in",res=300)
 
 p <- plotCoords(spe_pre,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
-                pal=colors_pre) +
+                pal=colors_pre, point_size=0.1) +
   ggtitle("Domains Before BatchSVG") +
   labs(color = "PRECAST Cluster")
 
@@ -185,10 +185,10 @@ p +
 dev.off()
 
 data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
-png(here(data_name,"plots","PRECAST_cluster_7_post_clusters.png"),height=5,width=6,unit="in",res=300)
+png(here(data_name,"plots","PRECAST_cluster_7_post_clusters.png"),height=6,width=7,unit="in",res=300)
 
 p <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
-                pal=colors_post) +
+                pal=colors_post, point_size=0.01) +
   ggtitle("Domains After BatchSVG") +
   labs(color = "PRECAST Cluster")
 

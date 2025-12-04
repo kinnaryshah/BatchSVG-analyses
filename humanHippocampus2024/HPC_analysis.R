@@ -184,10 +184,10 @@ colors_post["CA3"] <- "#FF7518"
 # vis PRECAST clusters
 
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","PRECAST_cluster_pre_clusters.png"),height=5,width=8,unit="in",res=300)
+png(here(data_name,"plots","PRECAST_cluster_pre_clusters.png"),height=6,width=9,unit="in",res=300)
 
 p <- plotCoords(spe_pre,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
-                pal=colors_pre) +
+                pal=colors_pre, point_size=0.000005) +
   ggtitle("Domains Before BatchSVG") +
   labs(color = "PRECAST Cluster")
 
@@ -200,10 +200,10 @@ p +
 dev.off()
 
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","PRECAST_cluster_post_clusters.png"),height=5,width=8,unit="in",res=300)
+png(here(data_name,"plots","PRECAST_cluster_post_clusters.png"),height=6,width=9,unit="in",res=300)
 
 p <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
-                pal=colors_post) +
+                pal=colors_post, point_size=0.000005) +
   ggtitle("Domains After BatchSVG") +
   labs(color = "PRECAST Cluster")
 
@@ -523,13 +523,16 @@ p1 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
     aes(x = cluster, y = -0.6, label = sprintf("Mean = %.2f", mean_width)),
     inherit.aes = FALSE,
     vjust = 1.2,
-    size = 2.8
+    size = 4
   ) +
   theme_bw() +
   ylim(-0.6, 0.5) +
   xlab("Cluster") +
   ylab("Silhouette Width (Before BatchSVG)") +
-  labs(colour = "Closest Domain\nBefore BatchSVG")
+  labs(colour = "Closest Domain\nBefore BatchSVG") +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
 
 p1
 
@@ -596,17 +599,20 @@ p2 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
     aes(x = cluster, y = -0.6, label = sprintf("Mean = %.2f", mean_width)),
     inherit.aes = FALSE,
     vjust = 1.2,
-    size = 2.8
+    size = 4
   ) +
   theme_bw() +
   ylim(-0.6,0.5) +
   xlab("Cluster") +
   ylab("Silhouette Width (After BatchSVG)") +
-  labs(colour = "Closest Domain\nAfter BatchSVG")
+  labs(colour = "Closest Domain\nAfter BatchSVG") +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
 
 data_name = "humanHippocampus2024"
 
-png(here(data_name,"plots","PRECAST_cluster_both_sil.png"),height=6,width=9,unit="in",res=300)
+png(here(data_name,"plots","PRECAST_cluster_both_sil.png"),height=8,width=11,unit="in",res=300)
 
 wrap_plots(p1,p2,ncol=1, axes="collect_x")
 
@@ -762,10 +768,10 @@ splot1 <- splot1 +
 
 
 
-splot2 <- plotCoords(spe, annotate="ENSG00000174576", assay="logcounts", 
+splot2 <- plotCoords(spe, annotate="ENSG00000099860", assay="logcounts", 
                      sample_id="sample_id", point_size=.1,
                      pal=c("white","black")) +
-  labs(color="logcounts", title = bquote(italic(NPAS4) ~ "(BatchSVG)"))
+  labs(color="logcounts", title = bquote(italic(GADD45B) ~ "(BatchSVG)"))
 
 splot2 <- splot2 +
   facet_wrap(
@@ -775,18 +781,19 @@ splot2 <- splot2 +
 
 
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","spot_plot_CALB1.png"),height=5,width=8,unit="in",res=300)
+png(here(data_name,"plots","spot_plot_CALB1.png"),height=6,width=9,unit="in",res=300)
 
 splot1
 
 dev.off()
 
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","spot_plot_NPAS4.png"),height=5,width=8,unit="in",res=300)
+png(here(data_name,"plots","spot_plot_GADD45B.png"),height=6,width=9,unit="in",res=300)
 
 splot2
 
 dev.off()
+
 
 
 
