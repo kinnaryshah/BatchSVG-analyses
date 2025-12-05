@@ -183,11 +183,19 @@ colors_post["CA3"] <- "#FF7518"
 
 # vis PRECAST clusters
 
+mod_spatialCoords = spatialCoords(spe_pre)
+for (i in unique(spe_pre$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_pre)$sample_id==i,]
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
 data_name = "humanHippocampus2024"
 png(here(data_name,"plots","PRECAST_cluster_pre_clusters.png"),height=6,width=9,unit="in",res=300)
 
 p <- plotCoords(spe_pre,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
-                pal=colors_pre, point_size=0.000005) +
+                pal=colors_pre, point_size=0.1,
+                x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   ggtitle("Domains Before BatchSVG") +
   labs(color = "PRECAST Cluster")
 
@@ -199,11 +207,19 @@ p +
 
 dev.off()
 
+mod_spatialCoords = spatialCoords(spe_post)
+for (i in unique(spe_post$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_post)$sample_id==i,]
+  mod_spatialCoords[colData(spe_post)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_post)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
 data_name = "humanHippocampus2024"
 png(here(data_name,"plots","PRECAST_cluster_post_clusters.png"),height=6,width=9,unit="in",res=300)
 
 p <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
-                pal=colors_post, point_size=0.000005) +
+                pal=colors_post, point_size=0.1,
+                x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   ggtitle("Domains After BatchSVG") +
   labs(color = "PRECAST Cluster")
 
@@ -754,10 +770,17 @@ spe$sample_id[spe$sample_id == "V11L05-335_D1"] <- "Br8325"
 spe$sample_id[spe$sample_id == "V11L05-336_A1"] <- "Br8667"
 spe$sample_id <- as.factor(spe$sample_id)
 
+mod_spatialCoords = spatialCoords(spe)
+for (i in unique(spe$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe)$sample_id==i,]
+  mod_spatialCoords[colData(spe)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
 
 splot1 <- plotCoords(spe, annotate="ENSG00000104327", assay="logcounts", 
                      sample_id="sample_id", point_size=.1,
-                     pal=c("white","black")) +
+                     pal=c("white","black"),
+                     x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   labs(color="logcounts", title = bquote(italic(CALB1) ~ "(DG Marker)"))
 
 splot1 <- splot1 +
@@ -770,7 +793,8 @@ splot1 <- splot1 +
 
 splot2 <- plotCoords(spe, annotate="ENSG00000099860", assay="logcounts", 
                      sample_id="sample_id", point_size=.1,
-                     pal=c("white","black")) +
+                     pal=c("white","black"),
+                     x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   labs(color="logcounts", title = bquote(italic(GADD45B) ~ "(BatchSVG)"))
 
 splot2 <- splot2 +
@@ -799,7 +823,8 @@ dev.off()
 
 splot1 <- plotCoords(spe, annotate="ENSG00000256618", assay="logcounts", 
                      sample_id="sample_id", point_size=.1,
-                     pal=c("white","black")) +
+                     pal=c("white","black"),
+                     x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   labs(color="logcounts", title = bquote(italic(MTRNR2L1)))
 
 splot1 <- splot1 +
@@ -810,7 +835,8 @@ splot1 <- splot1 +
 
 splot2 <- plotCoords(spe, annotate="ENSG00000123358", assay="logcounts", 
                      sample_id="sample_id", point_size=.1,
-                     pal=c("white","black")) +
+                     pal=c("white","black"),
+                     x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   labs(color="logcounts", title = bquote(italic(NR4A1)))
 
 splot2 <- splot2 +
@@ -821,7 +847,8 @@ splot2 <- splot2 +
 
 splot3 <- plotCoords(spe, annotate="ENSG00000229807", assay="logcounts", 
                      sample_id="sample_id", point_size=.1,
-                     pal=c("white","black")) +
+                     pal=c("white","black"),
+                     x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   labs(color="logcounts", title = bquote(italic(XIST)))
 
 splot3 <- splot3 +
@@ -832,7 +859,8 @@ splot3 <- splot3 +
 
 splot4 <- plotCoords(spe, annotate="ENSG00000170345", assay="logcounts", 
                      sample_id="sample_id", point_size=.1,
-                     pal=c("white","black")) +
+                     pal=c("white","black"),
+                     x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   labs(color="logcounts", title = bquote(italic(FOS)))
 
 splot4 <- splot4 +
