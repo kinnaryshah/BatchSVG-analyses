@@ -49,13 +49,13 @@ filt_svgs <- read.csv(here("spatialLIBD_DLPFC_12_3_7_12_expanded","results","spa
                       check.names=F)
 
 # marker gene heatmaps
-source("../dlpfc_genes.r")
+source("dlpfc_genes.r")
 dlpfc.genes$Inhb <- NULL
 
 rownames(spe_pre) <- rowData(spe_pre)$gene_name
 
 genes <- intersect(unlist(dlpfc.genes),rownames(spe_pre))
-cell_type_per_gene <- c(rep("Micro.Vasc",4),rep("Astro",4),
+cell_type_per_gene <- c(rep("Vasc",4),rep("Astro",4),
                         rep("L2",5),rep("L3",3),rep("L4",4),
                         rep("L5",4),rep("L6",3),rep("Oligo",2))
 
@@ -108,7 +108,7 @@ dev.off()
 rownames(spe_post) <- rowData(spe_post)$gene_name
 
 genes <- intersect(unlist(dlpfc.genes),rownames(spe_post))
-cell_type_per_gene <- c(rep("Micro.Vasc",4),rep("Astro",4),
+cell_type_per_gene <- c(rep("Vasc",4),rep("Astro",4),
                         rep("L2",5),rep("L3",3),rep("L4",4),
                         rep("L5",4),rep("L6",3),rep("Oligo",2))
 
