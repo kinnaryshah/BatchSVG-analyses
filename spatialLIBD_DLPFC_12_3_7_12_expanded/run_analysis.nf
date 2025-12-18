@@ -20,7 +20,7 @@ include { spot_plot_bias } from './../scripts/spatial/bias_genes_plot.nf'
 
 workflow {
 
-    // download is same as spatialLIBD_DLPFC_12_3_7_12
+    // download_data(params.data_name)
 
     // run nnSVG
 
