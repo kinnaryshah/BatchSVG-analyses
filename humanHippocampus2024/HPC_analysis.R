@@ -881,9 +881,10 @@ load(file=here("humanHippocampus2024","results", "humanHippocampus2024_sample_id
 
 # needed to reformat the function a bit
 
-.theme_dev_point_plot <- function(plot, point_size, point_shape) {
+.theme_dev_point_plot <- function(plot, point_size, outlier_point_size, point_shape) {
   plot +
-    geom_point(size = point_size, shape = point_shape) + 
+    geom_point(aes(size = is_outlier), shape = point_shape) + 
+    scale_size_manual(values = c("FALSE" = point_size, "TRUE" = outlier_point_size), guide = "none") +
     scale_x_log10() + 
     scale_y_log10() +
     geom_abline(aes(slope = 1, intercept = 0), lty = 2) +
@@ -895,13 +896,14 @@ load(file=here("humanHippocampus2024","results", "humanHippocampus2024_sample_id
           axis.title.x = element_text(size = 10),
           axis.title.y = element_text(size = 10)) +
     labs(x= "Deviance without batch", y="Deviance with batch", 
-         color = "nSD Deviance",
+         color = "nSD Deviance\ncutoff=10",
          title = "Deviance Comparison")
 }
 
-.theme_rank_point_plot <- function(plot, point_size, point_shape) {
+.theme_rank_point_plot <- function(plot, point_size, outlier_point_size, point_shape) {
   plot +
-    geom_point(size = point_size, shape = point_shape) + 
+    geom_point(aes(size = is_outlier), shape = point_shape) + 
+    scale_size_manual(values = c("FALSE" = point_size, "TRUE" = outlier_point_size), guide = "none") +
     scale_y_reverse() + 
     geom_abline(aes(slope = -1, intercept = 0), lty = 2) +
     theme_bw() + 
@@ -912,14 +914,15 @@ load(file=here("humanHippocampus2024","results", "humanHippocampus2024_sample_id
           axis.title.x = element_text(size = 10),
           axis.title.y = element_text(size = 10)) +
     labs(x= "Rank without batch", y="Rank with batch", 
-         color = "nSD Rank",
+         color = "nSD Rank\ncutoff=5",
          title = "Rank Comparison")
 }
 
 num_batches <- 1
 nSD_rank <- 5
 nSD_dev <- 10
-plot_point_size <- 1
+plot_point_size <- 0.5
+outlier_point_size <- 3
 plot_point_shape <- 16
 plot_text_size <- 3
 plot_palette <- "RdPu"
@@ -944,6 +947,9 @@ for (i in seq_along(list_batch_df)) {
                                 breaks=seq(0,max(batch_df[[dev_colname]]) + sd_dev, 
                                            by=sd_dev), include.lowest=TRUE)
     
+    # Create outlier indicator for deviance
+    batch_df$is_outlier <- batch_df[[dev_colname]] > sd_dev
+    
     col_pal_dev <- brewer.pal(length(unique(batch_df[["nSD_bin_dev"]])), 
                               plot_palette[i])
     col_pal_dev[1] <- "grey"
@@ -952,7 +958,9 @@ for (i in seq_along(list_batch_df)) {
                           aes(x = .data[["dev_default"]], y = .data[[paste0("dev_", batch)]],
                               color = .data[["nSD_bin_dev"]]))
     dev_sd_plot <- .theme_dev_point_plot(dev_sd_plot,
-                                         point_size = plot_point_size[i], point_shape = plot_point_shape[i])+
+                                         point_size = plot_point_size[i], 
+                                         outlier_point_size = outlier_point_size[i],
+                                         point_shape = plot_point_shape[i])+
       scale_color_manual(values=col_pal_dev) +
       labs(subtitle = "")+
       geom_text_repel(
@@ -973,6 +981,9 @@ for (i in seq_along(list_batch_df)) {
                                  breaks=seq(0,max(batch_df[[rank_colname]]) + sd_rank, 
                                             by=sd_rank),include.lowest=TRUE)
     
+    # Create outlier indicator for rank
+    batch_df$is_outlier <- batch_df[[rank_colname]] > sd_rank
+    
     col_pal_rank <- brewer.pal(length(unique(batch_df$nSD_bin_rank)), 
                                plot_palette[i])
     col_pal_rank[1] <- "grey"
@@ -981,7 +992,9 @@ for (i in seq_along(list_batch_df)) {
                            aes(x = .data[["rank_default"]],y = .data[[paste0("rank_", batch)]],
                                color = .data[["nSD_bin_rank"]]))
     rank_sd_plot <- .theme_rank_point_plot(rank_sd_plot,
-                                           point_size = plot_point_size[i], point_shape = plot_point_shape[i])+
+                                           point_size = plot_point_size[i], 
+                                           outlier_point_size = outlier_point_size[i],
+                                           point_shape = plot_point_shape[i])+
       scale_color_manual(values = col_pal_rank) +
       labs(subtitle = "")+
       geom_text_repel(
@@ -995,9 +1008,8 @@ for (i in seq_along(list_batch_df)) {
   
 }
 
-
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","bias_features_final.png"),height=3,width=18,unit="in",res=300)
+png(here(data_name,"plots","bias_features_final.png"),height=7,width=37,unit="in",res=300)
 
 wrap_plots(dev_sd_plot,rank_sd_plot)
 
