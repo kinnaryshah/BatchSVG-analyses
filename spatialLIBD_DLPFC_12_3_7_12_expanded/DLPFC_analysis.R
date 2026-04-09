@@ -564,7 +564,7 @@ pca2_sample
 data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
 png(here(data_name,"plots","PRECAST_cluster_both_PCA.png"),height=12,width=9,unit="in",res=300)
 
-wrap_plots(pca1,pca1_sample,pca2,pca2_sample,ncol=2)
+wrap_plots(pca1,pca1_sample,pca2,pca2_sample,ncol=2) + plot_annotation(tag_levels = 'A')
 
 dev.off()
 

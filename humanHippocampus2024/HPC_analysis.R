@@ -601,9 +601,9 @@ pca2_sample <- plot_hexbin_meta(hex, col = "sample_id", action = "majority", xla
 pca2_sample
 
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","PRECAST_cluster_both_PCA_HPC.png"),height=12,width=16,unit="in",res=300)
+png(here(data_name,"plots","PRECAST_cluster_both_PCA_HPC.png"),height=12,width=9,unit="in",res=300)
 
-wrap_plots(pca1,pca1_sample,pca2,pca2_sample,ncol=2)
+wrap_plots(pca1,pca1_sample,pca2,pca2_sample,ncol=2) + plot_annotation(tag_levels = 'A')
 
 dev.off()
 
