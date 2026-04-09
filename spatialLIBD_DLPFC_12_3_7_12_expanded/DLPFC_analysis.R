@@ -483,6 +483,13 @@ pca1
 
 dev.off()
 
+label_df <- make_hexbin_label(hex, col = "sample_id")
+
+pca1_sample <- plot_hexbin_meta(hex, col = "sample_id", action = "majority", xlab = "PC1 (35.36%)", ylab = "PC2 (14.04%)") +
+  ggtitle("Before BatchSVG") + theme(legend.position = "right")
+
+pca1_sample
+
 sil.approx <- approxSilhouette(reducedDim(res_pre, "pp-GLM-PCA"), clusters=res_pre$PRECAST_cluster)
 sil.approx
 
@@ -547,10 +554,17 @@ pca2
 
 dev.off()
 
+label_df <- make_hexbin_label(hex, col = "sample_id")
+
+pca2_sample <- plot_hexbin_meta(hex, col = "sample_id", action = "majority", xlab = "PC1 (35.30%)", ylab = "PC2 (14.01%)") +
+  ggtitle("After BatchSVG") + theme(legend.position = "right") 
+
+pca2_sample
+
 data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
 png(here(data_name,"plots","PRECAST_cluster_both_PCA.png"),height=12,width=9,unit="in",res=300)
 
-wrap_plots(pca1,pca2,ncol=1)
+wrap_plots(pca1,pca1_sample,pca2,pca2_sample,ncol=2)
 
 dev.off()
 
