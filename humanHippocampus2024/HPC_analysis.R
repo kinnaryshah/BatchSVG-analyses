@@ -1029,3 +1029,68 @@ wrap_plots(dev_sd_plot,rank_sd_plot)
 
 dev.off()
 
+
+# vis BayesSpace results
+
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_harmony_BayesSpace_preBatchSVG.Rdata"))
+spe_pre <- spe
+spe_pre$bayesSpace_captureArea_7 <- as.factor(spe_pre$bayesSpace_captureArea_7)
+
+mod_spatialCoords = spatialCoords(spe_pre)
+for (i in unique(spe_pre$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_pre)$sample_id==i,]
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_harmony_BayesSpace_postBatchSVG.Rdata"))
+spe_post <- spe
+spe_post$bayesSpace_captureArea_7 <- as.factor(spe_post$bayesSpace_captureArea_7)
+
+mod_spatialCoords = spatialCoords(spe_post)
+for (i in unique(spe_post$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_post)$sample_id==i,]
+  mod_spatialCoords[colData(spe_post)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_post)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
+# set colors for each set of clusters
+colors_pre <- brewer.pal(n = 7, name = "Paired")
+colors_pre <- setNames(colors_pre, c(3,7,1,4,6,5,2))
+colors_pre[3] <- "#FF7518"
+
+colors_post <- brewer.pal(n = 7, name = "Paired")
+colors_post <- setNames(colors_post, c(3,2,4,5,7,6,1))
+colors_post[1] <- "#FF7518"
+
+
+p1 <- plotCoords(spe_pre,sample_id="sample_id",annotate = "bayesSpace_captureArea_7",assay_name = "logcounts",
+                pal = colors_pre, point_size=0.1,
+                x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
+  ggtitle("Domains Before BatchSVG") +
+  labs(color = "BayesSpace Cluster")
+
+p2 <- plotCoords(spe_post,sample_id="sample_id",annotate = "bayesSpace_captureArea_7",assay_name = "logcounts",
+                 pal = colors_post, point_size=0.1,
+                 x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
+  ggtitle("Domains After BatchSVG") +
+  labs(color = "BayesSpace Cluster")
+
+
+data_name = "humanHippocampus2024"
+png(here(data_name,"plots","harmony_BayesSpace_clusters.png"),height=6,width=9,unit="in",res=300)
+
+wrap_plots ( p1 +
+  facet_wrap(
+    "sample_id",
+    nrow = 1
+  ),
+
+p2 +
+  facet_wrap(
+    "sample_id",
+    nrow = 1
+  ), nrow=2
+)
+
+dev.off()

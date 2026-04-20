@@ -774,3 +774,66 @@ png(here(data_name,"plots","bias_features_final.png"),height=3,width=18,unit="in
 wrap_plots(dev_sd_plot,rank_sd_plot)
 
 dev.off()
+
+
+
+
+# vis BayesSpace results
+
+load(file=here("spatialLIBD_DLPFC_12_3_7_12_expanded","results", "spatialLIBD_DLPFC_12_3_7_12_expanded_spe_harmony_BayesSpace_preBatchSVG_6.Rdata"))
+spe_pre <- spe
+spe_pre$bayesSpace_captureArea_6 <- as.factor(spe_pre$bayesSpace_captureArea_6)
+
+mod_spatialCoords = spatialCoords(spe_pre)
+for (i in unique(spe_pre$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_pre)$sample_id==i,]
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
+load(file=here("spatialLIBD_DLPFC_12_3_7_12_expanded","results", "spatialLIBD_DLPFC_12_3_7_12_expanded_spe_harmony_BayesSpace_postBatchSVG_6.Rdata"))
+spe_post <- spe
+spe_post$bayesSpace_captureArea_6 <- as.factor(spe_post$bayesSpace_captureArea_6)
+
+mod_spatialCoords = spatialCoords(spe_post)
+for (i in unique(spe_post$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_post)$sample_id==i,]
+  mod_spatialCoords[colData(spe_post)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_post)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
+# set colors for each set of clusters
+colors_pre <- brewer.pal(n = 6, name = "Paired")
+colors_post <- brewer.pal(n = 6, name = "Paired")
+
+
+p1 <- plotCoords(spe_pre,sample_id="sample_id",annotate = "bayesSpace_captureArea_6",assay_name = "logcounts",
+                 pal = colors_pre, point_size=0.1,
+                 x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
+  ggtitle("Domains Before BatchSVG") +
+  labs(color = "BayesSpace Cluster")
+
+p2 <- plotCoords(spe_post,sample_id="sample_id",annotate = "bayesSpace_captureArea_6",assay_name = "logcounts",
+                 pal = colors_post, point_size=0.1,
+                 x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
+  ggtitle("Domains After BatchSVG") +
+  labs(color = "BayesSpace Cluster")
+
+
+data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
+png(here(data_name,"plots","harmony_BayesSpace_clusters.png"),height=6,width=7,unit="in",res=300)
+
+wrap_plots ( p1 +
+               facet_wrap(
+                 "sample_id",
+                 nrow = 1
+               ),
+             
+             p2 +
+               facet_wrap(
+                 "sample_id",
+                 nrow = 1
+               ), nrow=2
+)
+
+dev.off()
