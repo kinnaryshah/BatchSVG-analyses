@@ -40,7 +40,7 @@ spe_pre$sample_id[spe_pre$sample_id == "V11L05-335_D1"] <- "Br8325"
 spe_pre$sample_id[spe_pre$sample_id == "V11L05-336_A1"] <- "Br8667"
 spe_pre$sample_id <- as.factor(spe_pre$sample_id)
 
-load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_postBatchSVG.Rdata"))
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_postBatchSVG_SpatialDE2.Rdata"))
 spe_post <- spe
 spe_post$PRECAST_cluster <- unfactor(spe_post$PRECAST_cluster)
 spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 1] <- "WM"
@@ -218,7 +218,7 @@ data_name = "humanHippocampus2024"
 png(here(data_name,"plots","PRECAST_cluster_post_clusters.png"),height=6,width=9,unit="in",res=300)
 
 p <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
-                pal=colors_post, point_size=0.1,
+                point_size=0.1,
                 x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
   ggtitle("Domains After BatchSVG") +
   labs(color = "PRECAST Cluster")
@@ -1094,3 +1094,75 @@ p2 +
 )
 
 dev.off()
+
+
+# vis SpatialDE2 results
+
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_preBatchSVG_SpatialDE2.Rdata"))
+spe_pre <- spe
+
+mod_spatialCoords = spatialCoords(spe_pre)
+for (i in unique(spe_pre$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_pre)$sample_id==i,]
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_pre)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_postBatchSVG_SpatialDE2.Rdata"))
+spe_post <- spe
+
+mod_spatialCoords = spatialCoords(spe_post)
+for (i in unique(spe_post$sample_id)) {
+  tmp = mod_spatialCoords[colData(spe_post)$sample_id==i,]
+  mod_spatialCoords[colData(spe_post)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
+  mod_spatialCoords[colData(spe_post)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
+}
+
+# set colors for each set of clusters
+colors_pre <- brewer.pal(n = 7, name = "Paired")
+colors_pre <- setNames(colors_pre, c(4,2,1,5,6,7,3))
+colors_pre[3] <- "#FF7518"
+
+colors_post <- brewer.pal(n = 7, name = "Paired")
+colors_post <- setNames(colors_post, c(3,4,6,2,5,7,1))
+colors_post[3] <- "#FF7518"
+
+p1 <- plotCoords(spe_pre,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
+                 pal = colors_pre, point_size=0.1,
+                 x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
+  ggtitle("Domains Before BatchSVG") +
+  labs(color = "PRECAST Cluster\nwith SpatialDE2")
+
+p2 <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
+                 pal = colors_post, point_size=0.1,
+                 x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
+  ggtitle("Domains After BatchSVG") +
+  labs(color = "PRECAST Cluster\nwith SpatialDE2")
+
+
+data_name = "humanHippocampus2024"
+png(here(data_name,"plots","SpatialDE2_clusters.png"),height=6,width=9,unit="in",res=300)
+
+wrap_plots ( p1 +
+               facet_wrap(
+                 "sample_id",
+                 nrow = 1
+               ),
+             
+             p2 +
+               facet_wrap(
+                 "sample_id",
+                 nrow = 1
+               ), nrow=2
+)
+
+dev.off()
+
+# remove NAs to use aricode() package
+# use domain for data-driven annotation
+na_idx <- is.na(spe_pre$domain)
+NMI(spe_pre$PRECAST_cluster[!na_idx],spe_pre$domain[!na_idx])
+
+na_idx <- is.na(spe_post$domain)
+NMI(spe_post$PRECAST_cluster[!na_idx],spe_post$domain[!na_idx])
+
