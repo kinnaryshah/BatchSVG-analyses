@@ -40,7 +40,7 @@ spe_pre$sample_id[spe_pre$sample_id == "V11L05-335_D1"] <- "Br8325"
 spe_pre$sample_id[spe_pre$sample_id == "V11L05-336_A1"] <- "Br8667"
 spe_pre$sample_id <- as.factor(spe_pre$sample_id)
 
-load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_postBatchSVG_SpatialDE2.Rdata"))
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_PRECAST_postBatchSVG.Rdata"))
 spe_post <- spe
 spe_post$PRECAST_cluster <- unfactor(spe_post$PRECAST_cluster)
 spe_post$PRECAST_cluster[spe_post$PRECAST_cluster == 1] <- "WM"
@@ -101,10 +101,7 @@ heatmap_mat <- t(scale(t(heatmap_mat)))
 colors <- brewer.pal(n = 5, name = "Dark2")
 names(colors) <- unique(cell_type_per_gene)
 
-data_name = "humanHippocampus2024"
-png(here(data_name,"plots","PRECAST_cluster_pre_marker_heatmap_logcounts.png"),height=3,width=7,unit="in",res=300)
-
-Heatmap(
+h1 <- Heatmap(
   t(heatmap_mat),
   cluster_rows = F, cluster_columns = F, row_names_side = "left",
   show_row_names = TRUE, show_column_names = TRUE,
@@ -118,6 +115,11 @@ Heatmap(
     show_legend = T
   ),
 )
+
+data_name = "humanHippocampus2024"
+png(here(data_name,"plots","PRECAST_cluster_pre_marker_heatmap_logcounts.png"),height=3,width=7,unit="in",res=300)
+
+print(h1)
 
 dev.off()
 
@@ -151,11 +153,8 @@ heatmap_mat <- t(scale(t(heatmap_mat)))
 colors <- brewer.pal(n = 5, name = "Dark2")
 names(colors) <- unique(cell_type_per_gene)
 
-data_name = "humanHippocampus2024"
-png(here(data_name,"plots","PRECAST_cluster_post_marker_heatmap_logcounts.png"),height=3,width=7,unit="in",res=300)
 
-
-Heatmap(
+h2 <- Heatmap(
   t(heatmap_mat),
   cluster_rows = F, cluster_columns = F, row_names_side = "left",
   show_row_names = TRUE, show_column_names = TRUE,
@@ -169,6 +168,17 @@ Heatmap(
     show_legend = T
   ),
 )
+
+data_name = "humanHippocampus2024"
+png(here(data_name,"plots","PRECAST_cluster_post_marker_heatmap_logcounts.png"),height=3,width=7,unit="in",res=300)
+
+print(h2)
+
+dev.off()
+
+png(here(data_name,"plots","PRECAST_cluster_both_marker_heatmap_logcounts.png"),height=6,width=7,unit="in",res=300)
+
+wrap_plots(grid.grabExpr(draw(h1)), grid.grabExpr(draw(h2)), nrow=2) + plot_annotation(tag_levels = "A")
 
 dev.off()
 
@@ -554,7 +564,6 @@ p1 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
   ylab("Silhouette Width (Before BatchSVG)") +
   labs(colour = "Closest Domain\nBefore BatchSVG") +
   theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 
 p1
@@ -637,7 +646,6 @@ p2 <- ggplot(sil.data, aes(x=cluster, y=width, colour=closest)) +
   ylab("Silhouette Width (After BatchSVG)") +
   labs(colour = "Closest Domain\nAfter BatchSVG") +
   theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 
 data_name = "humanHippocampus2024"
@@ -938,7 +946,7 @@ nSD_dev <- 10
 plot_point_size <- 0.5
 outlier_point_size <- 3
 plot_point_shape <- 16
-plot_text_size <- 3
+plot_text_size <- 6
 plot_palette <- "RdPu"
 
 
@@ -1023,7 +1031,7 @@ for (i in seq_along(list_batch_df)) {
 }
 
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","bias_features_final.png"),height=7,width=37,unit="in",res=300)
+png(here(data_name,"plots","bias_features_final.png"),height=7,width=30,unit="in",res=300)
 
 wrap_plots(dev_sd_plot,rank_sd_plot)
 
@@ -1053,11 +1061,12 @@ for (i in unique(spe_post$sample_id)) {
   mod_spatialCoords[colData(spe_post)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
   mod_spatialCoords[colData(spe_post)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
 }
-
+3         7         1         4         6         5         2 
+"#A6CEE3" "#1F78B4" "#B2DF8A" "#33A02C" "#FB9A99" "#E31A1C" "#FDBF6F" 
 # set colors for each set of clusters
 colors_pre <- brewer.pal(n = 7, name = "Paired")
-colors_pre <- setNames(colors_pre, c(3,7,1,4,6,5,2))
-colors_pre[3] <- "#FF7518"
+colors_pre <- setNames(colors_pre, c(3,7,5,4,6,1,2))
+colors_pre[6] <- "#FF7518"
 
 colors_post <- brewer.pal(n = 7, name = "Paired")
 colors_post <- setNames(colors_post, c(3,2,4,5,7,6,1))
@@ -1067,13 +1076,13 @@ colors_post[1] <- "#FF7518"
 p1 <- plotCoords(spe_pre,sample_id="sample_id",annotate = "bayesSpace_captureArea_7",assay_name = "logcounts",
                 pal = colors_pre, point_size=0.1,
                 x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
-  ggtitle("Domains Before BatchSVG") +
+  ggtitle("BayesSpace Domains Before BatchSVG") +
   labs(color = "BayesSpace Cluster")
 
 p2 <- plotCoords(spe_post,sample_id="sample_id",annotate = "bayesSpace_captureArea_7",assay_name = "logcounts",
                  pal = colors_post, point_size=0.1,
                  x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
-  ggtitle("Domains After BatchSVG") +
+  ggtitle("BayesSpace Domains After BatchSVG") +
   labs(color = "BayesSpace Cluster")
 
 

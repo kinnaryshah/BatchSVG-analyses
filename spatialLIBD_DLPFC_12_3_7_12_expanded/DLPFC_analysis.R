@@ -84,10 +84,7 @@ heatmap_mat <- t(scale(t(heatmap_mat)))
 colors <- brewer.pal(n = 8, name = "Dark2")
 names(colors) <- unique(cell_type_per_gene)
 
-data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
-png(here(data_name,"plots","PRECAST_cluster_pre_marker_heatmap_logcounts_DLPFC.png"),height=5,width=8,unit="in",res=300)
-
-Heatmap(
+h1 <- Heatmap(
   t(heatmap_mat),
   cluster_rows = F, cluster_columns = F, row_names_side = "left",
   show_row_names = TRUE, show_column_names = TRUE,
@@ -101,6 +98,12 @@ Heatmap(
     show_legend = T
   ),
 )
+
+
+data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
+png(here(data_name,"plots","PRECAST_cluster_pre_marker_heatmap_logcounts_DLPFC.png"),height=5,width=8,unit="in",res=300)
+
+print(h1)
 
 dev.off()
 
@@ -137,10 +140,7 @@ heatmap_mat <- t(scale(t(heatmap_mat)))
 colors <- brewer.pal(n = 8, name = "Dark2")
 names(colors) <- unique(cell_type_per_gene)
 
-data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
-png(here(data_name,"plots","PRECAST_cluster_post_marker_heatmap_logcounts_DLPFC.png"),height=5,width=8,unit="in",res=300)
-
-Heatmap(
+h2 <- Heatmap(
   t(heatmap_mat),
   cluster_rows = F, cluster_columns = F, row_names_side = "left",
   show_row_names = TRUE, show_column_names = TRUE,
@@ -155,8 +155,19 @@ Heatmap(
   ),
 )
 
+data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
+png(here(data_name,"plots","PRECAST_cluster_post_marker_heatmap_logcounts_DLPFC.png"),height=5,width=8,unit="in",res=300)
+
+print(h2)
+
 dev.off()
 
+
+png(here(data_name,"plots","PRECAST_cluster_both_marker_heatmap_logcounts.png"),height=10,width=7,unit="in",res=300)
+
+wrap_plots(grid.grabExpr(draw(h1)), grid.grabExpr(draw(h2)), nrow=2) + plot_annotation(tag_levels = "A")
+
+dev.off()
 
 # set colors for each set of clusters
 colors_pre <- brewer.pal(n = 6, name = "Paired")
@@ -810,13 +821,13 @@ colors_post <- brewer.pal(n = 6, name = "Paired")
 p1 <- plotCoords(spe_pre,sample_id="sample_id",annotate = "bayesSpace_captureArea_6",assay_name = "logcounts",
                  pal = colors_pre, point_size=0.1,
                  x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
-  ggtitle("Domains Before BatchSVG") +
+  ggtitle("BayesSpace Domains Before BatchSVG") +
   labs(color = "BayesSpace Cluster")
 
 p2 <- plotCoords(spe_post,sample_id="sample_id",annotate = "bayesSpace_captureArea_6",assay_name = "logcounts",
                  pal = colors_post, point_size=0.1,
                  x_coord=mod_spatialCoords[,1], y_coord=mod_spatialCoords[,2]) +
-  ggtitle("Domains After BatchSVG") +
+  ggtitle("BayesSpace Domains After BatchSVG") +
   labs(color = "BayesSpace Cluster")
 
 
@@ -837,3 +848,59 @@ wrap_plots ( p1 +
 )
 
 dev.off()
+
+
+
+# vis SpatialDE2 results
+
+load(file=here("spatialLIBD_DLPFC_12_3_7_12_expanded","results", "spatialLIBD_DLPFC_12_3_7_12_expanded_spe_PRECAST_preBatchSVG_SpatialDE2.Rdata"))
+spe_pre <- spe
+
+load(file=here("spatialLIBD_DLPFC_12_3_7_12_expanded","results", "spatialLIBD_DLPFC_12_3_7_12_expanded_spe_PRECAST_postBatchSVG_SpatialDE2.Rdata"))
+spe_post <- spe
+
+# vis PRECAST clusters
+
+# set colors for each set of clusters
+colors_pre <- brewer.pal(n = 6, name = "Paired")
+colors_pre <- setNames(colors_pre, c(5,3,2,6,4,1))
+
+colors_post <- brewer.pal(n = 6, name = "Paired")
+colors_post <- setNames(colors_post, c(2,5,6,4,3,1))
+
+p1 <- plotCoords(spe_pre,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
+                pal=colors_pre, point_size=0.1) +
+  ggtitle("Domains Before BatchSVG") +
+  labs(color = "PRECAST Cluster")
+
+p2 <- plotCoords(spe_post,sample_id="sample_id",annotate = "PRECAST_cluster",assay_name = "logcounts",
+                pal=colors_post, point_size=0.01) +
+  ggtitle("Domains After BatchSVG") +
+  labs(color = "PRECAST Cluster")
+
+data_name = "spatialLIBD_DLPFC_12_3_7_12_expanded"
+png(here(data_name,"plots","SpatialDE2_clusters.png"),height=6,width=7,unit="in",res=300)
+
+wrap_plots ( p1 +
+               facet_wrap(
+                 "sample_id",
+                 nrow = 1
+               ),
+             
+             p2 +
+               facet_wrap(
+                 "sample_id",
+                 nrow = 1
+               ), nrow=2
+)
+
+dev.off()
+
+# remove NAs to use aricode() package
+na_idx <- is.na(spe_pre$layer_guess_reordered)
+NMI(spe_pre$PRECAST_cluster[!na_idx],spe_pre$layer_guess_reordered[!na_idx])
+
+na_idx <- is.na(spe_post$layer_guess_reordered)
+NMI(spe_post$PRECAST_cluster[!na_idx],spe_post$layer_guess_reordered[!na_idx])
+
+
