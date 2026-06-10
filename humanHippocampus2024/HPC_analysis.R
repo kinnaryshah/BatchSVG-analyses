@@ -1040,7 +1040,7 @@ dev.off()
 
 # vis BayesSpace results
 
-load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_harmony_BayesSpace_preBatchSVG.Rdata"))
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_harmony_BayesSpace_preBatchSVG_7_offset.Rdata"))
 spe_pre <- spe
 spe_pre$bayesSpace_captureArea_7 <- as.factor(spe_pre$bayesSpace_captureArea_7)
 
@@ -1051,7 +1051,7 @@ for (i in unique(spe_pre$sample_id)) {
   mod_spatialCoords[colData(spe_pre)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
 }
 
-load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_harmony_BayesSpace_postBatchSVG.Rdata"))
+load(file=here("humanHippocampus2024","results", "humanHippocampus2024_spe_harmony_BayesSpace_postBatchSVG_7_offset.Rdata"))
 spe_post <- spe
 spe_post$bayesSpace_captureArea_7 <- as.factor(spe_post$bayesSpace_captureArea_7)
 
@@ -1061,8 +1061,6 @@ for (i in unique(spe_post$sample_id)) {
   mod_spatialCoords[colData(spe_post)$sample_id==i,1] = tmp[,1]-min(tmp[,1])
   mod_spatialCoords[colData(spe_post)$sample_id==i,2] = tmp[,2]-min(tmp[,2])
 }
-3         7         1         4         6         5         2 
-"#A6CEE3" "#1F78B4" "#B2DF8A" "#33A02C" "#FB9A99" "#E31A1C" "#FDBF6F" 
 # set colors for each set of clusters
 colors_pre <- brewer.pal(n = 7, name = "Paired")
 colors_pre <- setNames(colors_pre, c(3,7,5,4,6,1,2))
@@ -1087,7 +1085,7 @@ p2 <- plotCoords(spe_post,sample_id="sample_id",annotate = "bayesSpace_captureAr
 
 
 data_name = "humanHippocampus2024"
-png(here(data_name,"plots","harmony_BayesSpace_clusters.png"),height=6,width=9,unit="in",res=300)
+png(here(data_name,"plots","harmony_BayesSpace_clusters_HPC.png"),height=6,width=9,unit="in",res=300)
 
 wrap_plots ( p1 +
   facet_wrap(
